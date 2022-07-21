@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- For some reason, xunit.core.props isn't excluded in VS and sets this to true. -->
+    <IsTestProject>false</IsTestProject>
+    <!--
+      This assembly is referenced from rid agnostic configurations therefore we can't make it RID specific
+      and instead use runtime checks.
+    -->
+	<TargetFrameworks>net6.0</TargetFrameworks>
+	<EnableLibraryImportGenerator>true</EnableLibraryImportGenerator>
+	<RestoreAdditionalProjectSources>
+		https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json
+	</RestoreAdditionalProjectSources>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+    <LangVersion>preview</LangVersion>
+	<EnablePreviewFeatures>True</EnablePreviewFeatures>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ILLink.Substitutions.AggressiveTrimming.xml" LogicalName="ILLink.Substitutions.xml" Condition="'$(EnableAggressiveTrimming)' == 'true'" />
+    <Compile Include="System\AssertExtensions.cs" />
+    <Compile Include="System\IO\PathGenerator.cs" />
+    <Compile Include="System\PlatformDetection.Unix.cs" />
+    <Compile Include="System\PlatformDetection.Windows.cs" />
+    <Compile Include="System\Runtime\InteropServices\SafeBufferUtil.cs" />
+    <Compile Include="System\IO\FileCleanupTestBase.cs" />
+    <!-- We don't compile per but and instead use runtime platform checks. -->
+    <Compile Include="System\PlatformDetection.cs" />
+    <!--
+      Interop.Library is not designed to support runtime checks therefore we are picking the Windows
+      variant from the Common folder and adding the missing members manually.
+    -->
+    <Compile Include="Interop\Interop.Libraries.cs" />
+    <Compile Include="System\ThreadCultureChange.cs" />
+  </ItemGroup>
+  <!-- Windows imports -->
+  <!-- Unix imports -->
+  <!-- Android imports -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="7.0.0-beta.22369.9" />
+    <PackageReference Include="xunit.core" Version="2.4.2-pre.9" ExcludeAssets="build" />
+    <PackageReference Include="xunit.assert" Version="2.4.2-pre.9" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
+    <!-- Upgrade the NetStandard.Library transitive xunit dependency to avoid 1.x NS dependencies. -->
+    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="System\Buffers\" />
+  </ItemGroup>
+</Project>

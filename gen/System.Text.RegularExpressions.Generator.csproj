@@ -1,0 +1,89 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <EnableDefaultItems>true</EnableDefaultItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <UsingToolXliff>true</UsingToolXliff>
+    <CLSCompliant>false</CLSCompliant>
+    <NoWarn>$(NoWarn);CS0436;CS0649</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);REGEXGENERATOR</DefineConstants>
+    <AnalyzerLanguage>cs</AnalyzerLanguage>
+	<LangVersion>preview</LangVersion>
+	<Nullable>enable</Nullable>
+	<EnablePreviewFeatures>true</EnablePreviewFeatures>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- This generator ships as part of the .NET ref pack. Since VS ingests new Roslyn versions at a different cadence than the .NET SDK, we are pinning this generator to build against Roslyn 4.0 to ensure that we don't break users who are using .NET 7 previews in VS. -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.3.0-2.final" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Common generator support -->
+    <Compile Include="..\common\Roslyn\GetBestTypeByMetadataName.cs" Link="Common\Roslyn\GetBestTypeByMetadataName.cs" />
+    <Compile Include="..\common\Roslyn\Hash.cs" Link="Common\Roslyn\Hash.cs" />
+    <Compile Include="..\common\Roslyn\ISyntaxHelper.cs" Link="Common\Roslyn\ISyntaxHelper.cs" />
+    <Compile Include="..\common\Roslyn\CSharpSyntaxHelper.cs" Link="Common\Roslyn\CSharpSyntaxHelper.cs" />
+    <Compile Include="..\common\Roslyn\GlobalAliases.cs" Link="Common\Roslyn\GlobalAliases.cs" />
+    <Compile Include="..\common\Roslyn\SyntaxNodeGrouping.cs" Link="Common\Roslyn\SyntaxNodeGrouping.cs" />
+    <Compile Include="..\common\Roslyn\SyntaxValueProvider.ImmutableArrayValueComparer.cs" Link="Common\Roslyn\SyntaxValueProvider.ImmutableArrayValueComparer.cs" />
+    <Compile Include="..\common\Roslyn\SyntaxValueProvider_ForAttributeWithMetadataName.cs" Link="Common\Roslyn\SyntaxValueProvider_ForAttributeWithMetadataName.cs" />
+    <Compile Include="..\common\Roslyn\SyntaxValueProvider_ForAttributeWithSimpleName.cs" Link="Common\Roslyn\SyntaxValueProvider_ForAttributeWithSimpleName.cs" />
+    <Compile Include="..\common\IsExternalInit.cs" Link="Common\System\Runtime\CompilerServices\IsExternalInit.cs" />
+
+    <!-- Code included from System.Text.RegularExpressions -->
+    <Compile Include="..\common\HexConverter.cs" Link="Production\HexConverter.cs" />
+    <Compile Include="..\common\ValueStringBuilder.cs" Link="Production\ValueStringBuilder.cs" />
+    <Compile Include="..\common\ValueListBuilder.cs" Link="Production\ValueListBuilder.cs" />
+    <Compile Include="..\common\ValueListBuilder.Pop.cs" Link="Production\ValueListBuilder.Pop.cs" />
+    <Compile Include="..\src\SR.Designer.cs" Link="Production\SR.Designer.cs" />
+	<Compile Include="..\src\System\Threading\StackHelper.cs" Link="Production\StackHelper.cs" />
+	<Compile Include="..\src\System\Text\RegularExpressions\RegexCaseEquivalences.Data.cs" Link="Production\RegexCaseEquivalences.Data.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexCaseEquivalences.cs" Link="Production\RegexCaseEquivalences.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexCaseBehavior.cs" Link="Production\RegexCaseBehavior.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexCharClass.cs" Link="Production\RegexCharClass.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexFindOptimizations.cs" Link="Production\RegexFindOptimizations.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexNode.cs" Link="Production\RegexNode.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexNodeKind.cs" Link="Production\RegexNodeKind.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexOpcode.cs" Link="Production\RegexOpcode.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexOptions.cs" Link="Production\RegexOptions.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexParseError.cs" Link="Production\RegexParseError.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexParseException.cs" Link="Production\RegexParseException.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexParser.cs" Link="Production\RegexParser.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexPrefixAnalyzer.cs" Link="Production\RegexPrefixAnalyzer.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexTree.cs" Link="Production\RegexTree.cs" />
+    <Compile Include="..\src\System\Text\RegularExpressions\RegexTreeAnalyzer.cs" Link="Production\RegexTreeAnalyzer.cs" />
+    <Compile Include="..\src\System\Collections\HashtableExtensions.cs" Link="Production\HashtableExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SR.resx" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="SR.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>SR.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="SR.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>SR.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<Target Name="HotFudge" AfterTargets="ResolveAssemblyReferences">
+		<ItemGroup>
+			<ReferencePathToBeRemoved Include="@(ReferencePath)" Condition="$([System.String]::Copy(&quot;%(ReferencePath.Filename)&quot;).StartsWith('System.Text.RegularExpressions'))" />
+			<ReferencePath Remove="@(ReferencePathToBeRemoved)" />
+		</ItemGroup>
+
+		<Message Importance="high" Text="ReferencePath +++ @(ReferencePath) +++" />
+	</Target>
+
+</Project>
