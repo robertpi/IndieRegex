@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace System.Text.RegularExpressions.Generator
+namespace System.Text.RegularExpressions
 {
     internal partial class SR
     {
