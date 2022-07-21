@@ -43,6 +43,7 @@
     <Compile Include="Regex.UnicodeChar.Tests.cs" />
     <Compile Include="RegexCharacterSetTests.cs" />
     <Compile Include="RegexCultureTests.cs" />
+    <Compile Include="RegexGeneratorHelper.netcoreapp.cs" />
     <Compile Include="RegexMatchTimeoutExceptionTests.cs" />
     <Compile Include="RegexParserTests.cs" />
 
@@ -63,7 +64,6 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <Compile Include="CustomDerivedRegexScenarioTest.cs" />
     <Compile Include="CSharpCodeFixVerifier`2.cs" />
-    <Compile Include="UpgradeToRegexGeneratorAnalyzerTests.cs" />
     <Compile Include="RegexRunnerTests.cs" />
     <Compile Include="Regex.Count.Tests.cs" />
     <Compile Include="RegexAssert.netcoreapp.cs" />
@@ -80,20 +80,18 @@
     <Compile Include="RegexGeneratorParserTests.cs" />
     <Compile Include="RegexGroupNameTests.cs" />
     <Compile Include="RegexExperiment.cs" />
-    <Compile Include="RegexGeneratorHelper.netcoreapp.cs" />
     <Compile Include="..\..\common\DebuggerAttributes.cs" Link="Common\DebuggerAttributes.cs" />
 
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.3.0-2.final" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" Version="1.1.1" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.3.0-2.final" />
-    <ProjectReference Include="..\..\gen\System.Text.RegularExpressions.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
   </ItemGroup>
   <ItemGroup>
     <HighAotMemoryUsageAssembly Include="Microsoft.CodeAnalysis.CSharp.dll" /> 
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\gen\IndieSystem.Text.RegularExpressions.Generator.csproj" />
     <ProjectReference Include="..\..\src\IndieSystem.Text.RegularExpressions.csproj" />
-    <ProjectReference Include="..\Data\System.Text.RegularExpressions.TestData.csproj" />
     <ProjectReference Include="..\TestUtilities\TestUtilities.csproj" />
   </ItemGroup>
 
@@ -104,8 +102,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="7.0.0-beta.22369.9" />
-		<PackageReference Include="Microsoft.DotNet.RemoteExecutor" Version="7.0.0-beta.22369.9" />
 	</ItemGroup>
 
 	<Target Name="HotFudge" AfterTargets="ResolveAssemblyReferences">

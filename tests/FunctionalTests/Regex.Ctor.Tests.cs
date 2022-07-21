@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
-using Microsoft.DotNet.RemoteExecutor;
+// using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 
 namespace System.Text.RegularExpressions.Tests
@@ -142,25 +142,25 @@ namespace System.Text.RegularExpressions.Tests
             }
         }
 
-        [ConditionalFact(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
-        public static void StaticCtor_InvalidTimeoutObject_ExceptionThrown()
-        {
-            RemoteExecutor.Invoke(() =>
-            {
-                AppDomain.CurrentDomain.SetData(RegexHelpers.DefaultMatchTimeout_ConfigKeyName, true);
-                Assert.Throws<TypeInitializationException>(() => Regex.InfiniteMatchTimeout);
-            }).Dispose();
-        }
+        //[ConditionalFact(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
+        //public static void StaticCtor_InvalidTimeoutObject_ExceptionThrown()
+        //{
+        //    RemoteExecutor.Invoke(() =>
+        //    {
+        //        AppDomain.CurrentDomain.SetData(RegexHelpers.DefaultMatchTimeout_ConfigKeyName, true);
+        //        Assert.Throws<TypeInitializationException>(() => Regex.InfiniteMatchTimeout);
+        //    }).Dispose();
+        //}
 
-        [ConditionalFact(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
-        public static void StaticCtor_InvalidTimeoutRange_ExceptionThrown()
-        {
-            RemoteExecutor.Invoke(() =>
-            {
-                AppDomain.CurrentDomain.SetData(RegexHelpers.DefaultMatchTimeout_ConfigKeyName, TimeSpan.Zero);
-                Assert.Throws<TypeInitializationException>(() => Regex.InfiniteMatchTimeout);
-            }).Dispose();
-        }
+        //[ConditionalFact(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
+        //public static void StaticCtor_InvalidTimeoutRange_ExceptionThrown()
+        //{
+        //    RemoteExecutor.Invoke(() =>
+        //    {
+        //        AppDomain.CurrentDomain.SetData(RegexHelpers.DefaultMatchTimeout_ConfigKeyName, TimeSpan.Zero);
+        //        Assert.Throws<TypeInitializationException>(() => Regex.InfiniteMatchTimeout);
+        //    }).Dispose();
+        //}
 
         [Fact]
         public void InitializeReferences_OnlyInvokedOnce()
@@ -235,24 +235,24 @@ namespace System.Text.RegularExpressions.Tests
             public SerializableDerivedRegex(SerializationInfo info, StreamingContext context) : base(info, context) { }
         }
 
-        [ConditionalFact(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework)]
-        public void Ctor_PatternInName()
-        {
-            RemoteExecutor.Invoke(() =>
-            {
-                // Just make sure setting the environment variable doesn't cause problems.
-                Environment.SetEnvironmentVariable("DOTNET_SYSTEM_TEXT_REGULAREXPRESSIONS_PATTERNINNAME", "1");
+        //[ConditionalFact(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
+        //[SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework)]
+        //public void Ctor_PatternInName()
+        //{
+        //    RemoteExecutor.Invoke(() =>
+        //    {
+        //        // Just make sure setting the environment variable doesn't cause problems.
+        //        Environment.SetEnvironmentVariable("DOTNET_SYSTEM_TEXT_REGULAREXPRESSIONS_PATTERNINNAME", "1");
 
-                // Short pattern
-                var r = new Regex("abc", RegexOptions.Compiled);
-                Assert.True(r.IsMatch("123abc456"));
+        //        // Short pattern
+        //        var r = new Regex("abc", RegexOptions.Compiled);
+        //        Assert.True(r.IsMatch("123abc456"));
 
-                // Long pattern
-                string pattern = string.Concat(Enumerable.Repeat("1234567890", 20));
-                r = new Regex(pattern, RegexOptions.Compiled);
-                Assert.True(r.IsMatch("abc" + pattern + "abc"));
-            }).Dispose();
-        }
+        //        // Long pattern
+        //        string pattern = string.Concat(Enumerable.Repeat("1234567890", 20));
+        //        r = new Regex(pattern, RegexOptions.Compiled);
+        //        Assert.True(r.IsMatch("abc" + pattern + "abc"));
+        //    }).Dispose();
+        //}
     }
 }

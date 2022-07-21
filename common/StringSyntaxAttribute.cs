@@ -7,12 +7,14 @@ namespace System.Diagnostics.CodeAnalysis
 {
     /// <summary>Specifies the syntax used in a string.</summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-#if SYSTEM_PRIVATE_CORELIB
-    public
-#else
-    internal
-#endif
-    sealed class StringSyntaxAttribute : Attribute
+    //#if SYSTEM_PRIVATE_CORELIB
+    //    public
+    //#else
+    //    internal
+    //#endif
+
+// TODO RP is this a good idea??
+    public sealed class StringSyntaxAttribute : Attribute
     {
         /// <summary>Initializes the <see cref="StringSyntaxAttribute"/> with the identifier of the syntax used.</summary>
         /// <param name="syntax">The syntax identifier.</param>

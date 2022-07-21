@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Tests;
-using Microsoft.DotNet.RemoteExecutor;
+// using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 
 namespace System.Text.RegularExpressions.Tests

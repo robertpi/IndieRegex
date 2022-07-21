@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Tests;
-using Microsoft.DotNet.RemoteExecutor;
+// using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 using Xunit.Sdk;
 
@@ -1050,14 +1050,16 @@ namespace System.Text.RegularExpressions.Tests
                 }
             };
 
-            if (RegexHelpers.IsNonBacktracking(engine))
-            {
-                RemoteExecutor.Invoke(func, engine.ToString()).Dispose();
-            }
-            else
-            {
-                await func(engine.ToString());
-            }
+            // TODO RP
+            await func(engine.ToString());
+            //if (RegexHelpers.IsNonBacktracking(engine))
+            //{
+            //    RemoteExecutor.Invoke(func, engine.ToString()).Dispose();
+            //}
+            //else
+            //{
+            //    await func(engine.ToString());
+            //}
         }
 
         public static IEnumerable<object[]> Match_DeepNesting_MemberData()
@@ -1182,62 +1184,62 @@ namespace System.Text.RegularExpressions.Tests
             Assert.Throws<RegexMatchTimeoutException>(() => r.Match(input));
         }
 
-        [ConditionalTheory(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
-        [MemberData(nameof(RegexHelpers.AvailableEngines_MemberData), MemberType = typeof(RegexHelpers))]
-        [SkipOnCoreClr("https://github.com/dotnet/runtime/issues/67886", ~RuntimeConfiguration.Release)]
-        [SkipOnCoreClr("https://github.com/dotnet/runtime/issues/67886", RuntimeTestModes.JitMinOpts)]
-        public void Match_InstanceMethods_DefaultTimeout_Throws(RegexEngine engine)
-        {
-            if (RegexHelpers.IsNonBacktracking(engine))
-            {
-                // Test relies on backtracking triggering timeout checks
-                return;
-            }
+        //[ConditionalTheory(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
+        //[MemberData(nameof(RegexHelpers.AvailableEngines_MemberData), MemberType = typeof(RegexHelpers))]
+        //[SkipOnCoreClr("https://github.com/dotnet/runtime/issues/67886", ~RuntimeConfiguration.Release)]
+        //[SkipOnCoreClr("https://github.com/dotnet/runtime/issues/67886", RuntimeTestModes.JitMinOpts)]
+        //public void Match_InstanceMethods_DefaultTimeout_Throws(RegexEngine engine)
+        //{
+        //    if (RegexHelpers.IsNonBacktracking(engine))
+        //    {
+        //        // Test relies on backtracking triggering timeout checks
+        //        return;
+        //    }
 
-            RemoteExecutor.Invoke(async engineString =>
-            {
-                RegexEngine engine = (RegexEngine)int.Parse(engineString, CultureInfo.InvariantCulture);
+        //    RemoteExecutor.Invoke(async engineString =>
+        //    {
+        //        RegexEngine engine = (RegexEngine)int.Parse(engineString, CultureInfo.InvariantCulture);
 
-                const string Pattern = @"^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$";
-                string input = new string('a', 50) + "@a.a";
+        //        const string Pattern = @"^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$";
+        //        string input = new string('a', 50) + "@a.a";
 
-                AppDomain.CurrentDomain.SetData(RegexHelpers.DefaultMatchTimeout_ConfigKeyName, TimeSpan.FromMilliseconds(100));
+        //        AppDomain.CurrentDomain.SetData(RegexHelpers.DefaultMatchTimeout_ConfigKeyName, TimeSpan.FromMilliseconds(100));
 
-                Regex r = await RegexHelpers.GetRegexAsync(engine, Pattern);
-                Assert.Throws<RegexMatchTimeoutException>(() => r.Match(input));
-                Assert.Throws<RegexMatchTimeoutException>(() => r.IsMatch(input));
-                Assert.Throws<RegexMatchTimeoutException>(() => r.Matches(input).Count);
+        //        Regex r = await RegexHelpers.GetRegexAsync(engine, Pattern);
+        //        Assert.Throws<RegexMatchTimeoutException>(() => r.Match(input));
+        //        Assert.Throws<RegexMatchTimeoutException>(() => r.IsMatch(input));
+        //        Assert.Throws<RegexMatchTimeoutException>(() => r.Matches(input).Count);
 
-            }, ((int)engine).ToString(CultureInfo.InvariantCulture)).Dispose();
-        }
+        //    }, ((int)engine).ToString(CultureInfo.InvariantCulture)).Dispose();
+        //}
 
-        [ConditionalTheory(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
-        [InlineData(RegexOptions.None)]
-        [InlineData(RegexOptions.Compiled)]
-        public void Match_StaticMethods_DefaultTimeout_Throws(RegexOptions options)
-        {
-            RemoteExecutor.Invoke(optionsString =>
-            {
-                RegexOptions options = (RegexOptions)int.Parse(optionsString, CultureInfo.InvariantCulture);
+        //[ConditionalTheory(typeof(RemoteExecutor), nameof(RemoteExecutor.IsSupported))]
+        //[InlineData(RegexOptions.None)]
+        //[InlineData(RegexOptions.Compiled)]
+        //public void Match_StaticMethods_DefaultTimeout_Throws(RegexOptions options)
+        //{
+        //    RemoteExecutor.Invoke(optionsString =>
+        //    {
+        //        RegexOptions options = (RegexOptions)int.Parse(optionsString, CultureInfo.InvariantCulture);
 
-                const string Pattern = @"^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$";
-                string input = new string('a', 50) + "@a.a";
+        //        const string Pattern = @"^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\w]*[0-9a-zA-Z])*\.)+[a-zA-Z]{2,9})$";
+        //        string input = new string('a', 50) + "@a.a";
 
-                AppDomain.CurrentDomain.SetData(RegexHelpers.DefaultMatchTimeout_ConfigKeyName, TimeSpan.FromMilliseconds(100));
+        //        AppDomain.CurrentDomain.SetData(RegexHelpers.DefaultMatchTimeout_ConfigKeyName, TimeSpan.FromMilliseconds(100));
 
-                if (options == RegexOptions.None)
-                {
-                    Assert.Throws<RegexMatchTimeoutException>(() => Regex.Match(input, Pattern));
-                    Assert.Throws<RegexMatchTimeoutException>(() => Regex.IsMatch(input, Pattern));
-                    Assert.Throws<RegexMatchTimeoutException>(() => Regex.Matches(input, Pattern).Count);
-                }
+        //        if (options == RegexOptions.None)
+        //        {
+        //            Assert.Throws<RegexMatchTimeoutException>(() => Regex.Match(input, Pattern));
+        //            Assert.Throws<RegexMatchTimeoutException>(() => Regex.IsMatch(input, Pattern));
+        //            Assert.Throws<RegexMatchTimeoutException>(() => Regex.Matches(input, Pattern).Count);
+        //        }
 
-                Assert.Throws<RegexMatchTimeoutException>(() => Regex.Match(input, Pattern, options));
-                Assert.Throws<RegexMatchTimeoutException>(() => Regex.IsMatch(input, Pattern, options));
-                Assert.Throws<RegexMatchTimeoutException>(() => Regex.Matches(input, Pattern, options).Count);
+        //        Assert.Throws<RegexMatchTimeoutException>(() => Regex.Match(input, Pattern, options));
+        //        Assert.Throws<RegexMatchTimeoutException>(() => Regex.IsMatch(input, Pattern, options));
+        //        Assert.Throws<RegexMatchTimeoutException>(() => Regex.Matches(input, Pattern, options).Count);
 
-            }, ((int)options).ToString(CultureInfo.InvariantCulture)).Dispose();
-        }
+        //    }, ((int)options).ToString(CultureInfo.InvariantCulture)).Dispose();
+        //}
 
         [Theory]
         [InlineData(RegexOptions.None)]
@@ -1797,41 +1799,41 @@ namespace System.Text.RegularExpressions.Tests
             }
         }
 
-        private static bool IsNotArmProcessAndRemoteExecutorSupported => PlatformDetection.IsNotArmProcess && RemoteExecutor.IsSupported;
+        //private static bool IsNotArmProcessAndRemoteExecutorSupported => PlatformDetection.IsNotArmProcess && RemoteExecutor.IsSupported;
 
-        [ConditionalTheory(nameof(IsNotArmProcessAndRemoteExecutorSupported))] // times out on ARM
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, ".NET Framework does not have fix for https://github.com/dotnet/runtime/issues/24749")]
-        [SkipOnCoreClr("Long running tests: https://github.com/dotnet/runtime/issues/10680", ~RuntimeConfiguration.Release)]
-        [SkipOnCoreClr("Long running tests: https://github.com/dotnet/runtime/issues/10680", RuntimeTestModes.JitMinOpts)]
-        [MemberData(nameof(RegexHelpers.AvailableEngines_MemberData), MemberType = typeof(RegexHelpers))]
-        public void Match_ExcessPrefix(RegexEngine engine)
-        {
-            RemoteExecutor.Invoke(async engineString =>
-            {
-                var engine = (RegexEngine)Enum.Parse(typeof(RegexEngine), engineString);
+        //[ConditionalTheory(nameof(IsNotArmProcessAndRemoteExecutorSupported))] // times out on ARM
+        //[SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, ".NET Framework does not have fix for https://github.com/dotnet/runtime/issues/24749")]
+        //[SkipOnCoreClr("Long running tests: https://github.com/dotnet/runtime/issues/10680", ~RuntimeConfiguration.Release)]
+        //[SkipOnCoreClr("Long running tests: https://github.com/dotnet/runtime/issues/10680", RuntimeTestModes.JitMinOpts)]
+        //[MemberData(nameof(RegexHelpers.AvailableEngines_MemberData), MemberType = typeof(RegexHelpers))]
+        //public void Match_ExcessPrefix(RegexEngine engine)
+        //{
+        //    RemoteExecutor.Invoke(async engineString =>
+        //    {
+        //        var engine = (RegexEngine)Enum.Parse(typeof(RegexEngine), engineString);
 
-                // Should not throw out of memory
+        //        // Should not throw out of memory
 
-                // Repeaters
-                VerifyIsMatch((await RegexHelpers.GetRegexAsync(engine, @"a{2147483647,}")), "a", false, Regex.InfiniteMatchTimeout);
-                VerifyIsMatch((await RegexHelpers.GetRegexAsync(engine, @"a{50,}")), "a", false, Regex.InfiniteMatchTimeout);
-                VerifyIsMatch((await RegexHelpers.GetRegexAsync(engine, @"a{50_000,}")), "a", false, Regex.InfiniteMatchTimeout); // cutoff for Boyer-Moore prefix in release
+        //        // Repeaters
+        //        VerifyIsMatch((await RegexHelpers.GetRegexAsync(engine, @"a{2147483647,}")), "a", false, Regex.InfiniteMatchTimeout);
+        //        VerifyIsMatch((await RegexHelpers.GetRegexAsync(engine, @"a{50,}")), "a", false, Regex.InfiniteMatchTimeout);
+        //        VerifyIsMatch((await RegexHelpers.GetRegexAsync(engine, @"a{50_000,}")), "a", false, Regex.InfiniteMatchTimeout); // cutoff for Boyer-Moore prefix in release
 
-                // Multis
-                foreach (int length in new[] { 50, 50_000, char.MaxValue + 1 })
-                {
-                    // The large counters are too slow for counting a's in NonBacktracking engine
-                    // They will incur a constant of size length because in .*a{k} after reading n a's the
-                    // state will be .*a{k}|a{k-1}|...|a{k-n} which could be compacted to
-                    // .*a{k}|a{k-n,k-1} but is not currently being compacted
-                    if (!RegexHelpers.IsNonBacktracking(engine) || length < 50_000)
-                    {
-                        string s = "bcd" + new string('a', length) + "efg";
-                        VerifyIsMatch((await RegexHelpers.GetRegexAsync(engine, @$"a{{{length}}}")), s, true, Regex.InfiniteMatchTimeout);
-                    }
-                }
-            }, engine.ToString()).Dispose();
-        }
+        //        // Multis
+        //        foreach (int length in new[] { 50, 50_000, char.MaxValue + 1 })
+        //        {
+        //            // The large counters are too slow for counting a's in NonBacktracking engine
+        //            // They will incur a constant of size length because in .*a{k} after reading n a's the
+        //            // state will be .*a{k}|a{k-1}|...|a{k-n} which could be compacted to
+        //            // .*a{k}|a{k-n,k-1} but is not currently being compacted
+        //            if (!RegexHelpers.IsNonBacktracking(engine) || length < 50_000)
+        //            {
+        //                string s = "bcd" + new string('a', length) + "efg";
+        //                VerifyIsMatch((await RegexHelpers.GetRegexAsync(engine, @$"a{{{length}}}")), s, true, Regex.InfiniteMatchTimeout);
+        //            }
+        //        }
+        //    }, engine.ToString()).Dispose();
+        //}
 
         [Fact]
         public void Match_Invalid()
@@ -2026,14 +2028,16 @@ namespace System.Text.RegularExpressions.Tests
                 Assert.True(re.Match(fullinput).Success);
             };
 
-            if (RegexHelpers.IsNonBacktracking(engine))
-            {
-                RemoteExecutor.Invoke(func, engine.ToString(), fullpattern, fullinput).Dispose();
-            }
-            else
-            {
-                await func(engine.ToString(), fullpattern, fullinput);
-            }
+            // TODO RP
+            await func(engine.ToString(), fullpattern, fullinput);
+            //if (RegexHelpers.IsNonBacktracking(engine))
+            //{
+            //    RemoteExecutor.Invoke(func, engine.ToString(), fullpattern, fullinput).Dispose();
+            //}
+            //else
+            //{
+            //    await func(engine.ToString(), fullpattern, fullinput);
+            //}
         }
 
         public static IEnumerable<object[]> StressTestDeepNestingOfLoops_TestData()
@@ -2079,14 +2083,16 @@ namespace System.Text.RegularExpressions.Tests
                 Assert.True(re.Match(fullinput).Success);
             };
 
-            if (RegexHelpers.IsNonBacktracking(engine))
-            {
-                RemoteExecutor.Invoke(func, engine.ToString(), fullpattern, fullinput).Dispose();
-            }
-            else
-            {
-                await func(engine.ToString(), fullpattern, fullinput);
-            }
+            //TODO RP
+            await func(engine.ToString(), fullpattern, fullinput);
+            //if (RegexHelpers.IsNonBacktracking(engine))
+            //{
+            //    RemoteExecutor.Invoke(func, engine.ToString(), fullpattern, fullinput).Dispose();
+            //}
+            //else
+            //{
+            //    await func(engine.ToString(), fullpattern, fullinput);
+            //}
         }
 
         public static IEnumerable<object[]> StressTestNfaMode_TestData()

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 	
   <!-- 50MB unpacked: let's leave it out until we need it -->

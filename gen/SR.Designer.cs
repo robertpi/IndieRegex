@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Text.RegularExpressions.Generator  {
+namespace System.Text.RegularExpressions.Generator {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace System.Text.RegularExpressions.Generator  {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Text.RegularExpressions.Generator.SR", typeof(SR).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IndieSystem.Text.RegularExpressions.Generator.SR", typeof(SR).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

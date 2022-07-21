@@ -21,6 +21,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)ILLink.Substitutions.AggressiveTrimming.xml" LogicalName="ILLink.Substitutions.xml" Condition="'$(EnableAggressiveTrimming)' == 'true'" />
     <Compile Include="System\AssertExtensions.cs" />
     <Compile Include="System\IO\PathGenerator.cs" />
+    <Compile Include="System\LineEndingsHelper.cs" />
     <Compile Include="System\PlatformDetection.Unix.cs" />
     <Compile Include="System\PlatformDetection.Windows.cs" />
     <Compile Include="System\Runtime\InteropServices\SafeBufferUtil.cs" />

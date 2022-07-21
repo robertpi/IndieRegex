@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Text.RegularExpressi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gen", "gen", "{DD9454FC-CDDE-43D9-8B23-A7649E1A5C2D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Text.RegularExpressions.Generator", "gen\System.Text.RegularExpressions.Generator.csproj", "{F531AF61-96E7-4B5E-80BD-7F4BAD7D0C16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IndieSystem.Text.RegularExpressions.Generator", "gen\IndieSystem.Text.RegularExpressions.Generator.csproj", "{F531AF61-96E7-4B5E-80BD-7F4BAD7D0C16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestUtilities", "tests\TestUtilities\TestUtilities.csproj", "{A11B37C7-B125-481C-96DB-EA7807F73B1E}"
 EndProject

@@ -4,12 +4,12 @@
 namespace System.Text.RegularExpressions
 {
     [Flags]
-//#if REGEXGENERATOR
-//    internal
-//#else
-//    public
-//#endif
-    public enum RegexOptions
+#if REGEXGENERATOR
+    internal
+#else
+    public
+#endif
+    enum RegexOptions
     {
         /// <summary>Use default behavior.</summary>
         None                    = 0x0000,
