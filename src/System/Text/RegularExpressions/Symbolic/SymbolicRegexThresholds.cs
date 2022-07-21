@@ -52,11 +52,12 @@ namespace System.Text.RegularExpressions.Symbolic
         /// </remarks>
         internal static int GetSymbolicRegexSafeSizeThreshold()
         {
-            object? safeSizeThreshold = AppContext.GetData(SymbolicRegexSafeSizeThreshold_ConfigKeyName);
+            //object? safeSizeThreshold = AppContext.GetData(SymbolicRegexSafeSizeThreshold_ConfigKeyName);
 
-            return (safeSizeThreshold is not int safeSizeThresholdInt || safeSizeThresholdInt <= 0) ?
-                DefaultSymbolicRegexSafeSizeThreshold :
-                safeSizeThresholdInt;
+            //return (safeSizeThreshold is not int safeSizeThresholdInt || safeSizeThresholdInt <= 0) ?
+            //    DefaultSymbolicRegexSafeSizeThreshold :
+            //    safeSizeThresholdInt;
+            return int.MaxValue;
         }
     }
 }
