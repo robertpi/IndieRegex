@@ -12,8 +12,12 @@ namespace System.Text.RegularExpressions
 
         public CollectionDebuggerProxy(ICollection<T> collection)
         {
+#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(collection);
             _collection = collection;
+#else
+            _collection = collection ?? throw new ArgumentNullException(nameof(collection));
+#endif
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]

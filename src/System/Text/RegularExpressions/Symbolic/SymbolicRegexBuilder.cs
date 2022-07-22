@@ -232,7 +232,11 @@ namespace System.Text.RegularExpressions.Symbolic
         {
             // We maintain a cache of singletons, under the assumption that it's likely the same one/notone/set appears
             // multiple times in the same pattern.  First consult the cache, and then create a new singleton if one didn't exist.
+#if NET6_0_OR_GREATER
             ref SymbolicRegexNode<TSet>? result = ref CollectionsMarshal.GetValueRefOrAddDefault(_singletonCache, set, out _);
+#else
+            _singletonCache.TryGetValue(set, out var result);
+#endif
             return result ??= SymbolicRegexNode<TSet>.CreateSingleton(this, set);
         }
 

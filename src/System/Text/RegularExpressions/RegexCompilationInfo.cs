@@ -61,8 +61,12 @@ namespace System.Text.RegularExpressions
             [MemberNotNull(nameof(_nspace))]
             set
             {
+#if NET6_0_OR_GREATER
                 ArgumentNullException.ThrowIfNull(value, nameof(Namespace));
-                _nspace = value;
+                _pattern = value;
+#else
+                _pattern = value ?? throw new ArgumentNullException(nameof(Namespace));
+#endif
             }
         }
 
@@ -74,8 +78,12 @@ namespace System.Text.RegularExpressions
             [MemberNotNull(nameof(_pattern))]
             set
             {
+#if NET6_0_OR_GREATER
                 ArgumentNullException.ThrowIfNull(value, nameof(Pattern));
                 _pattern = value;
+#else
+                _pattern = value ?? throw new ArgumentNullException(nameof(Pattern));
+#endif
             }
         }
     }

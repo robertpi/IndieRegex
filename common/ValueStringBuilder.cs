@@ -159,7 +159,7 @@ namespace System.Text
             int remaining = _pos - index;
             _chars.Slice(index, remaining).CopyTo(_chars.Slice(index + count));
             s
-#if !NETCOREAPP
+#if !NETCOREAPP || !NET6_0_OR_GREATER
                 .AsSpan()
 #endif
                 .CopyTo(_chars.Slice(index));
@@ -210,7 +210,7 @@ namespace System.Text
             }
 
             s
-#if !NETCOREAPP
+#if !NETCOREAPP || !NET6_0_OR_GREATER
                 .AsSpan()
 #endif
                 .CopyTo(_chars.Slice(pos));

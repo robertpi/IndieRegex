@@ -178,7 +178,7 @@ namespace System.Text.RegularExpressions
         /// </summary>
         private int StringCode(string str)
         {
-#if REGEXGENERATOR
+#if REGEXGENERATOR || !NET6_0_OR_GREATER
             if (!_stringTable.TryGetValue(str, out int i))
             {
                 i = _stringTable.Count;

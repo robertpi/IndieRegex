@@ -71,7 +71,7 @@ namespace System.Text.RegularExpressions.Symbolic
             get
             {
                 Debug.Assert(i >= 0 && i < Length);
-                (int block, int bit) = Math.DivRem(i, 64);
+                int block = Math.DivRem(i, 64, out int bit);
                 return (_blocks[block] & (1ul << bit)) != 0;
             }
         }
@@ -79,7 +79,7 @@ namespace System.Text.RegularExpressions.Symbolic
         private void Set(int i)
         {
             Debug.Assert(i >= 0 && i < Length);
-            (int block, int bit) = Math.DivRem(i, 64);
+            int block = Math.DivRem(i, 64, out int bit);
             _blocks[block] |= 1ul << bit;
         }
 
@@ -175,7 +175,7 @@ namespace System.Text.RegularExpressions.Symbolic
             if (_hashcode == null)
             {
                 HashCode hc = default;
-                hc.AddBytes(MemoryMarshal.AsBytes<ulong>(_blocks));
+                // hc.AddBytes(MemoryMarshal.AsBytes<ulong>(_blocks));
                 hc.Add(Length);
                 _hashcode = hc.ToHashCode();
             }

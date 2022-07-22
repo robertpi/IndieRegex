@@ -342,7 +342,11 @@ namespace System.Text.RegularExpressions.Symbolic
 
             // Try to get the cached BDD for the set key.
             // If one doesn't yet exist, compute and populate it.
-            ref BDD? result = ref CollectionsMarshal.GetValueRefOrAddDefault(_setBddCache, set, out _);
+#if NET6_0_OR_GREATER
+            ref BDD? result = ref CollectionsMarshal.GetValueRefOrAddDefault(_setBddCache, set, out _); ;
+#else
+            _setBddCache.TryGetValue(set, out var result);
+#endif            
             return result ??= Compute(set);
 
             // <summary>Parses the RegexCharClass set string and creates a BDD that represents the same condition.</summary>

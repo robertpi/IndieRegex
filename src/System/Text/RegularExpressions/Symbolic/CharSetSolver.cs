@@ -386,7 +386,11 @@ namespace System.Text.RegularExpressions.Symbolic
 
         private BDD GetOrCreateBDD(int ordinal, BDD? one, BDD? zero)
         {
+#if NET6_0_OR_GREATER
             ref BDD? bdd = ref CollectionsMarshal.GetValueRefOrAddDefault(_bddCache, (ordinal, one, zero), out _);
+#else
+            _bddCache.TryGetValue((ordinal, one, zero), out var bdd);
+#endif
             return bdd ??= new BDD(ordinal, one, zero);
         }
 
