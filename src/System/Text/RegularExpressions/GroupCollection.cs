@@ -194,7 +194,11 @@ namespace System.Text.RegularExpressions
         IEnumerator<KeyValuePair<string, Group>> IEnumerable<KeyValuePair<string, Group>>.GetEnumerator() =>
             new Enumerator(this);
 
-        public bool TryGetValue(string key, [NotNullWhen(true)] out Group? value)
+        public bool TryGetValue(string key,
+#if !NETFRAMEWORK
+            [NotNullWhen(true)] 
+#endif
+            out Group? value)
         {
             Group group = this[key];
             if (group == Group.s_emptyGroup)

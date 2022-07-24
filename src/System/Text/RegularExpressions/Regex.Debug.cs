@@ -14,7 +14,11 @@ namespace System.Text.RegularExpressions
         /// <summary>Unwind the regex and save the resulting state graph in DGML</summary>
         /// <param name="writer">Writer to which the DGML is written.</param>
         /// <param name="maxLabelLength">maximum length of labels in nodes anything over that length is indicated with .. </param>
-        [ExcludeFromCodeCoverage(Justification = "Debug only")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Debug only"
+#endif
+            )]
         internal void SaveDGML(TextWriter writer, int maxLabelLength)
         {
             if (factory is not SymbolicRegexRunnerFactory srmFactory)
@@ -29,7 +33,11 @@ namespace System.Text.RegularExpressions
         /// Generates UnicodeCategoryRanges.cs for the namespace System.Text.RegularExpressions.Symbolic.Unicode
         /// in the given directory path. Only avaliable in DEBUG mode.
         /// </summary>
-        [ExcludeFromCodeCoverage(Justification = "Debug only")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+           Justification = "Debug only"
+#endif
+            )]
         internal static void GenerateUnicodeTables(string path)
         {
             UnicodeCategoryRangesGenerator.Generate("System.Text.RegularExpressions.Symbolic", "UnicodeCategoryRanges", path);
@@ -41,7 +49,11 @@ namespace System.Text.RegularExpressions
         /// <param name="k">upper bound on the number of generated strings</param>
         /// <param name="randomseed">random seed for the generator, 0 means no random seed</param>
         /// <returns></returns>
-        [ExcludeFromCodeCoverage(Justification = "Debug only")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Debug only"
+#endif
+            )]
         internal IEnumerable<string> SampleMatches(int k, int randomseed)
         {
             if (factory is not SymbolicRegexRunnerFactory srmFactory)
@@ -68,7 +80,11 @@ namespace System.Text.RegularExpressions
         /// <param name="includeOriginal">whether to explore the original pattern</param>
         /// <param name="exploreDfa">whether to explore DFA transitions</param>
         /// <param name="exploreNfa">whether to explore NFA transitions</param>
-        [ExcludeFromCodeCoverage(Justification = "Debug only")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Debug only"
+#endif
+            )]
         internal void Explore(bool includeDotStarred, bool includeReverse, bool includeOriginal, bool exploreDfa, bool exploreNfa)
         {
             if (factory is not SymbolicRegexRunnerFactory srmFactory)

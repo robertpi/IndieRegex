@@ -52,7 +52,14 @@ namespace System.Text.RegularExpressions.Symbolic
         public static BitVector CreateTrue(int length)
         {
             var bv = new BitVector(length);
+#if NETFRAMEWORK
+            for (int i = 0; i < bv._blocks.Length; i++)
+            {
+                bv._blocks[0] = ulong.MaxValue;
+        };
+#else
             Array.Fill(bv._blocks, ulong.MaxValue);
+#endif
             bv.ClearRemainderBits();
             return bv;
         }
@@ -171,19 +178,38 @@ namespace System.Text.RegularExpressions.Symbolic
 
         public override int GetHashCode()
         {
-            // Lazily compute and store the hash code if it hasn't yet been computed.
             if (_hashcode == null)
             {
+#if NETFRAMEWORK
+                foreach (var block in _blocks)
+                {
+                    _hashcode ^= 31 * block.GetHashCode();
+                }
+                _hashcode ^= 31 * Length;
+#else
+            // Lazily compute and store the hash code if it hasn't yet been computed.
                 HashCode hc = default;
-                // hc.AddBytes(MemoryMarshal.AsBytes<ulong>(_blocks));
+#if NET6_0_OR_GREATER
+                hc.AddBytes(MemoryMarshal.AsBytes<ulong>(_blocks));
+#else
+                foreach(var block in _blocks)
+                {
+                    hc.Add(block);
+                }
+#endif
                 hc.Add(Length);
                 _hashcode = hc.ToHashCode();
+#endif
             }
-
+    
             return _hashcode.GetValueOrDefault();
         }
 
-        public override bool Equals([NotNullWhen(true)] object? obj) =>
+        public override bool Equals(
+#if !NETFRAMEWORK
+            [NotNullWhen(true)] 
+#endif
+            object? obj) =>
             obj is BitVector other && Equals(other);
 
         public bool Equals(BitVector other) =>

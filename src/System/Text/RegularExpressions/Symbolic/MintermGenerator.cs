@@ -92,8 +92,14 @@ namespace System.Text.RegularExpressions.Symbolic
 
                 var stack = new Stack<PartitionTree>();
                 stack.Push(this);
+#if NETFRAMEWORK
+                while (stack.Count > 0)
+                {
+                    var node = stack.Pop();
+#else
                 while (stack.TryPop(out PartitionTree? node))
                 {
+#endif
                     if (node._left is null && node._right is null)
                     {
                         leaves.Add(node._set);

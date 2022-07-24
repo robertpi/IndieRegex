@@ -75,15 +75,21 @@ namespace System.Text.RegularExpressions.Symbolic
             // Precompute a hashchode value that respects BDD equivalence.
             // Two equivalent BDDs will always have the same hashcode
             // that is independent of object id values of the BDD objects.
+#if NETFRAMEWORK
+            _hashcode = ordinal ^  one?.GetHashCode() ?? 0 ^ zero?.GetHashCode() ?? 0;
+#else
             _hashcode = HashCode.Combine(ordinal, one, zero);
+#endif
         }
 
         /// <summary>
         /// True iff the node is a terminal (One and Zero are both null).
         /// True and False are terminals.
         /// </summary>
+#if NET5_0_OR_GREATER
         [MemberNotNullWhen(false, nameof(One))]
         [MemberNotNullWhen(false, nameof(Zero))]
+#endif
         public bool IsLeaf
         {
             get
@@ -149,7 +155,7 @@ namespace System.Text.RegularExpressions.Symbolic
             bdd is not null &&
             (this == bdd || (Ordinal == bdd.Ordinal && One == bdd.One && Zero == bdd.Zero));
 
-        #region Serialization
+#region Serialization
 #if DEBUG // currently used only from the debug-only code that regenerates the embedded serialized BDD data
         /// <summary>
         /// Serialize this BDD in a flat ulong array. The BDD may have at most 2^k ordinals and 2^n nodes, such that k+2n &lt; 64
@@ -158,7 +164,11 @@ namespace System.Text.RegularExpressions.Symbolic
         /// Serializer uses more compacted representations when fewer bits are needed, which is reflected in the first
         /// two numbers of the return value. MTBDD terminals are represented by negated numbers as -id.
         /// </summary>
-        [ExcludeFromCodeCoverage(Justification = "Used only to generate src data files")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Used only to generate src data files"
+#endif
+            )]
         public long[] Serialize()
         {
             if (IsEmpty)
@@ -236,7 +246,11 @@ namespace System.Text.RegularExpressions.Symbolic
         /// So this BDD itself (if different from True or False) appears last.
         /// In the case of True or False returns the empty array.
         /// </summary>
-        [ExcludeFromCodeCoverage(Justification = "Used only to generate src data files")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Used only to generate src data files"
+#endif
+            )]
         private BDD[] TopologicalSort()
         {
             if (IsFull || IsEmpty)
@@ -296,7 +310,11 @@ namespace System.Text.RegularExpressions.Symbolic
         /// Serialize this BDD into a byte array.
         /// This method is not valid for MTBDDs where some elements may be negative.
         /// </summary>
-        [ExcludeFromCodeCoverage(Justification = "Used only to generate src data files")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Used only to generate src data files"
+#endif
+            )]
         public byte[] SerializeToBytes()
         {
             if (IsEmpty)
@@ -412,7 +430,7 @@ namespace System.Text.RegularExpressions.Symbolic
             one_node_shift = ordinal_bits;
             ordinal_shift = 0;
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Finds the terminal for the input in a Multi-Terminal-BDD.
@@ -441,7 +459,11 @@ namespace System.Text.RegularExpressions.Symbolic
         /// Returns true if the only other terminal besides False is a MTBDD terminal that is different from True.
         /// If this is the case, outputs that terminal.
         /// </summary>
-        public bool IsEssentiallyBoolean([NotNullWhen(true)] out BDD? terminalActingAsTrue)
+        public bool IsEssentiallyBoolean(
+#if !NETFRAMEWORK
+            [NotNullWhen(true)] 
+#endif
+            out BDD? terminalActingAsTrue)
         {
             if (IsFull || IsEmpty)
             {

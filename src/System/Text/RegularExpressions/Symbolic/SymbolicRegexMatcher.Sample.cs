@@ -163,7 +163,11 @@ namespace System.Text.RegularExpressions.Symbolic
             }
 #else
         /// <inheritdoc cref="Regex.SampleMatches(int, int)"/>
-        [ExcludeFromCodeCoverage(Justification = "Currently only used for testing")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+           Justification = "Currently only used for testing"
+#endif
+            )]
         public override IEnumerable<string> SampleMatches(int k, int randomseed)
         {
             lock (this)
@@ -297,7 +301,7 @@ namespace System.Text.RegularExpressions.Symbolic
                 }
             }
 #endif
-            static BDD ToBDD(TSet set, ISolver<TSet> solver, CharSetSolver charSetSolver) => solver.ConvertToBDD(set, charSetSolver);
+        static BDD ToBDD(TSet set, ISolver<TSet> solver, CharSetSolver charSetSolver) => solver.ConvertToBDD(set, charSetSolver);
 
             static T Choose<T>(Random random, IList<T> elems) => elems[random.Next(elems.Count)];
 

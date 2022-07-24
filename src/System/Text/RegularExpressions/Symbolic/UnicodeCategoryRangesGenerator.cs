@@ -11,7 +11,11 @@ namespace System.Text.RegularExpressions.Symbolic
 {
 #if DEBUG
     /// <summary>Utility for generating unicode category ranges and corresponing binary decision diagrams.</summary>
-    [ExcludeFromCodeCoverage(Justification = "Used from tests to generate src data files")]
+    [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+        Justification = "Used from tests to generate src data files"
+#endif
+        )]
     internal static class UnicodeCategoryRangesGenerator
     {
         /// <summary>Generator for BDD Unicode category definitions.</summary>
@@ -39,7 +43,14 @@ namespace {namespacename}
     internal static class {classname}
     {{");
             var catMap = new Dictionary<UnicodeCategory, Ranges>();
-            foreach (UnicodeCategory c in Enum.GetValues<UnicodeCategory>())
+            foreach (UnicodeCategory c in
+#if NET5_0_OR_GREATER
+                Enum.GetValues<UnicodeCategory>()
+#else
+                Enum.GetValues(typeof(UnicodeCategory))
+#endif
+                )
+
             {
                 catMap[c] = new Ranges();
             }
@@ -132,4 +143,4 @@ namespace {namespacename}
         }
     }
 #endif
-}
+        }

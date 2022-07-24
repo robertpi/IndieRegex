@@ -7,15 +7,21 @@ namespace System.Text.RegularExpressions
 {
     internal static class ThrowHelper
     {
+#if !NETFRAMEWORK
         [DoesNotReturn]
+#endif
         internal static void ThrowArgumentNullException(ExceptionArgument arg) =>
             throw new ArgumentNullException(GetStringForExceptionArgument(arg));
 
+#if !NETFRAMEWORK
         [DoesNotReturn]
+#endif
         internal static void ThrowArgumentOutOfRangeException(ExceptionArgument arg) =>
             throw new ArgumentOutOfRangeException(GetStringForExceptionArgument(arg));
 
+#if !NETFRAMEWORK
         [DoesNotReturn]
+#endif
         internal static void ThrowArgumentOutOfRangeException(ExceptionArgument arg, ExceptionResource resource) =>
             throw new ArgumentOutOfRangeException(GetStringForExceptionArgument(arg), GetStringForExceptionResource(resource));
 

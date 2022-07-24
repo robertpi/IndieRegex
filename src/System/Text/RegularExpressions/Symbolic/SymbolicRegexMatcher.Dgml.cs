@@ -13,7 +13,11 @@ namespace System.Text.RegularExpressions.Symbolic
     internal sealed partial class SymbolicRegexMatcher<TSet>
     {
         /// <inheritdoc cref="Regex.SaveDGML(TextWriter, int)"/>
-        [ExcludeFromCodeCoverage(Justification = "Currently only used for testing")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Currently only used for testing"
+#endif
+            )]
         public override void SaveDGML(TextWriter writer, int maxLabelLength)
         {
             lock (this)
@@ -61,7 +65,11 @@ namespace System.Text.RegularExpressions.Symbolic
                     if (label.Length > maxLabelLength)
                     {
                         info = $"FullLabel = \"{label}\" ";
+#if NETFRAMEWORK
+                        label = string.Concat(label.Substring(0, maxLabelLength), "..");
+#else
                         label = string.Concat(label.AsSpan(0, maxLabelLength), "..");
+#endif
                     }
 
                     writer.WriteLine($"        <Link Source=\"{transition.Key.Source}\" Target=\"{transition.Key.Target}\" Label=\"{label}\" Category=\"NonEpsilonTransition\" {info}/>");
@@ -184,8 +192,12 @@ namespace System.Text.RegularExpressions.Symbolic
                 StringBuilder sb = new();
                 sb.Append($"States = {matcher._stateCache.Count}&#13;");
                 sb.Append($"Transitions = {transitionCount}&#13;");
-                sb.Append($"Min Terms ({matcher.Solver.GetMinterms()!.Length}) = ").AppendJoin(',',
-                    DescribeLabels(matcher.Solver.GetMinterms()!, matcher._builder));
+                sb.Append($"Min Terms ({matcher.Solver.GetMinterms()!.Length}) = ")
+#if NETFRAMEWORK
+                    .Append(String.Join(",", DescribeLabels(matcher.Solver.GetMinterms()!, matcher._builder)));
+#else
+                    .AppendJoin(',', DescribeLabels(matcher.Solver.GetMinterms()!, matcher._builder));
+#endif
                 return sb.ToString();
             }
 

@@ -13,7 +13,11 @@ namespace System.Text.RegularExpressions.Symbolic
     internal sealed partial class SymbolicRegexMatcher<TSet>
     {
         /// <inheritdoc cref="Regex.Explore(bool, bool, bool, bool, bool)"/>
-        [ExcludeFromCodeCoverage(Justification = "Currently only used for testing")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Currently only used for testing"
+#endif
+            )]
         public override void Explore(bool includeDotStarred, bool includeReverse, bool includeOriginal, bool exploreDfa, bool exploreNfa)
         {
             lock (this)

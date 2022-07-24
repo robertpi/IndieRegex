@@ -51,7 +51,11 @@ namespace System.Text.RegularExpressions
             if (s_includePatternInName)
             {
                 const int DescriptionLimit = 100; // arbitrary limit to avoid very long method names
+#if NETFRAMEWORK
+                description = string.Concat("_", pattern.Length > DescriptionLimit ? pattern.Substring(0, DescriptionLimit) : pattern);
+#else
                 description = string.Concat("_", pattern.Length > DescriptionLimit ? pattern.AsSpan(0, DescriptionLimit) : pattern);
+#endif
             }
 
             DynamicMethod tryfindNextPossibleStartPositionMethod = DefineDynamicMethod($"Regex{regexNum}_TryFindNextPossibleStartingPosition{description}", typeof(bool), typeof(CompiledRegexRunner), s_paramTypes);

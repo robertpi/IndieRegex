@@ -23,6 +23,13 @@ namespace System.Text.RegularExpressions
 
         protected internal override RegexRunner CreateInstance() =>
             new CompiledRegexRunner(
-                _scan ??= _scanMethod.CreateDelegate<CompiledRegexRunner.ScanDelegate>(), _culture);
+                _scan ??=
+#if NET5_0_OR_GREATER
+                    _scanMethod.CreateDelegate<CompiledRegexRunner.ScanDelegate>()
+#else
+                    (CompiledRegexRunner.ScanDelegate)_scanMethod.CreateDelegate(typeof(CompiledRegexRunner.ScanDelegate))
+#endif
+
+                , _culture);
     }
 }

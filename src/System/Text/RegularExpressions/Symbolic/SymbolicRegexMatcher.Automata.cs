@@ -321,7 +321,11 @@ namespace System.Text.RegularExpressions.Symbolic
         /// <summary>Gets or creates a new DFA transition.</summary>
         /// <remarks>This function locks the matcher for safe concurrent use of the <see cref="_builder"/></remarks>
         private bool TryCreateNewTransition(
-            MatchingState<TSet> sourceState, int mintermId, int offset, bool checkThreshold, [NotNullWhen(true)] out MatchingState<TSet>? nextState)
+            MatchingState<TSet> sourceState, int mintermId, int offset, bool checkThreshold,
+#if !NETFRAMEWORK
+            [NotNullWhen(true)] 
+#endif
+            out MatchingState<TSet>? nextState)
         {
             Debug.Assert(offset < _dfaDelta.Length);
 

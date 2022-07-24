@@ -45,8 +45,14 @@ namespace System.Text.RegularExpressions.Symbolic
 
             // Continue to iterate until the stack is empty, popping the next item on each iteration.
             // Some popped items may be pushed back on as part of processing.
+#if NETFRAMEWORK
+            while (stack.Count > 0)
+            {
+                (RegexNode Node, DoublyLinkedList<SymbolicRegexNode<BDD>> Result, DoublyLinkedList<SymbolicRegexNode<BDD>>[]? ChildResults) popped = stack.Pop();
+#else
             while (stack.TryPop(out (RegexNode Node, DoublyLinkedList<SymbolicRegexNode<BDD>> Result, DoublyLinkedList<SymbolicRegexNode<BDD>>[]? ChildResults) popped))
             {
+#endif
                 RegexNode node = popped.Node;
                 DoublyLinkedList<SymbolicRegexNode<BDD>> result = popped.Result;
                 DoublyLinkedList<SymbolicRegexNode<BDD>>[]? childResults = popped.ChildResults;
@@ -346,7 +352,7 @@ namespace System.Text.RegularExpressions.Symbolic
             ref BDD? result = ref CollectionsMarshal.GetValueRefOrAddDefault(_setBddCache, set, out _); ;
 #else
             _setBddCache.TryGetValue(set, out var result);
-#endif            
+#endif
             return result ??= Compute(set);
 
             // <summary>Parses the RegexCharClass set string and creates a BDD that represents the same condition.</summary>
@@ -368,7 +374,11 @@ namespace System.Text.RegularExpressions.Symbolic
                 // A BDD is created for each range, and is then negated if the set is negated.  All of the BDDs for
                 // all of the ranges are stored in a set of these "conditions", which will later have all of the BDDs
                 // and'd (conjunction) together if the set is negated, or or'd (disjunction) together if not negated.
+#if NETFRAMEWORK
+                List<(char First, char Last)>? ranges = RegexCharClass.ComputeRanges(new ReadOnlySpan<char>(set.ToCharArray()));
+#else
                 List<(char First, char Last)>? ranges = RegexCharClass.ComputeRanges(set);
+#endif
                 if (ranges is not null)
                 {
                     foreach ((char first, char last) in ranges)
@@ -458,7 +468,12 @@ namespace System.Text.RegularExpressions.Symbolic
                 // which translates into a set string that accepts everything.
                 BDD result = conditions.Count == 0 ?
                     (negate ? charSetSolver.Empty : charSetSolver.Full) :
-                    (negate ? charSetSolver.And(CollectionsMarshal.AsSpan(conditions)) : charSetSolver.Or(CollectionsMarshal.AsSpan(conditions)));
+#if NET5_0_OR_GREATER
+                    (negate ? charSetSolver.And(CollectionsMarshal.AsSpan(conditions)) : charSetSolver.Or(CollectionsMarshal.AsSpan(conditions))
+#else
+                    (negate ? charSetSolver.And(new Span<BDD>(conditions.ToArray())) : charSetSolver.Or(new Span<BDD>(conditions.ToArray()))
+#endif
+                    );
 
                 // Now apply the subtracted condition if there is one.  As a subtly of Regex semantics,
                 // the subtractor is not within the scope of the negation (if there is any negation).
@@ -519,7 +534,13 @@ namespace System.Text.RegularExpressions.Symbolic
                 // Gets the BDD for evaluating whether a character is part of the specified category.
                 BDD MapCategoryCodeToCondition(UnicodeCategory code)
                 {
-                    Debug.Assert(Enum.IsDefined(code) || code == (UnicodeCategory)(RegexCharClass.SpaceConst - 1), $"Unknown category: {code}");
+                    Debug.Assert(
+#if NET5_0_OR_GREATER
+                        Enum.IsDefined(code)
+#else
+                        Enum.IsDefined(typeof(UnicodeCategory), code)
+#endif
+                        || code == (UnicodeCategory)(RegexCharClass.SpaceConst - 1), $"Unknown category: {code}");
                     return code == (UnicodeCategory)(RegexCharClass.SpaceConst - 1) ?
                         UnicodeCategoryConditions.WhiteSpace :
                         UnicodeCategoryConditions.GetCategory(code);

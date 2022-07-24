@@ -129,7 +129,11 @@ namespace System.Text.RegularExpressions
             // We set runtext before calling InitializeForScan so that runmatch object is initialized with the text
             runtext = text;
 
+#if NETFRAMEWORK
+            InitializeForScan(regex, new ReadOnlySpan<char>(text.ToCharArray()), textstart, mode);
+#else
             InitializeForScan(regex, text, textstart, mode);
+#endif
 
             // InitializeForScan will default runtextstart and runtextend to 0 and length of string
             // since it is configured to work over a sliced portion of text so we adjust those values.
@@ -299,7 +303,11 @@ namespace System.Text.RegularExpressions
                 {
                     _checkTimeout = true;
                     _timeout = (int)(timeout.TotalMilliseconds + 0.5); // Round;
+#if NETFRAMEWORK
+                    _timeoutOccursAt = Environment.TickCount + _timeout;
+#else
                     _timeoutOccursAt = Environment.TickCount64 + _timeout;
+#endif
                 }
             }
         }
@@ -307,7 +315,11 @@ namespace System.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected internal void CheckTimeout()
         {
+#if NETFRAMEWORK
+            if (_checkTimeout && Environment.TickCount >= _timeoutOccursAt)
+#else
             if (_checkTimeout && Environment.TickCount64 >= _timeoutOccursAt)
+#endif
             {
                 ThrowRegexTimeout();
             }

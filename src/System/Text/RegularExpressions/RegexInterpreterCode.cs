@@ -69,7 +69,11 @@ namespace System.Text.RegularExpressions
 #if DEBUG
         /// <summary>Gets the number of integers required to store an operation represented by the specified opcode (including the opcode).</summary>
         /// <returns>Values range from 1 (just the opcode) to 3 (the opcode plus up to two operands).</returns>
-        [ExcludeFromCodeCoverage(Justification = "Used only for debugging assistance")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Used only for debugging assistance"
+#endif
+            )]
         public static int OpcodeSize(RegexOpcode opcode)
         {
             opcode &= RegexOpcode.OperatorMask;
@@ -136,7 +140,11 @@ namespace System.Text.RegularExpressions
             }
         }
 
-        [ExcludeFromCodeCoverage(Justification = "Used only for debugging assistance")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Used only for debugging assistance"
+#endif
+            )]
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -151,7 +159,11 @@ namespace System.Text.RegularExpressions
             return sb.ToString();
         }
 
-        [ExcludeFromCodeCoverage(Justification = "Used only for debugging assistance")]
+        [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+            Justification = "Used only for debugging assistance"
+#endif
+            )]
         internal string DescribeInstruction(int opcodeOffset)
         {
             RegexOpcode opcode = (RegexOpcode)Codes[opcodeOffset];
@@ -247,7 +259,11 @@ namespace System.Text.RegularExpressions
 
             return sb.ToString();
 
-            [ExcludeFromCodeCoverage(Justification = "Used only for debugging assistance")]
+            [ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+                Justification = "Used only for debugging assistance"
+#endif
+                )]
             string Indent() => new string(' ', Math.Max(1, 25 - sb.Length));
         }
 #endif

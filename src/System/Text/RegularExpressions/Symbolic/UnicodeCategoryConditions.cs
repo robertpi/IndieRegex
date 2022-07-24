@@ -27,12 +27,18 @@ namespace System.Text.RegularExpressions.Symbolic
         {
             // The implementation caches a BDD per defined UnicodeCategory.  If the enum ever gets
             // additional named values, the constant will need to be updated to reflect that.
-            Debug.Assert(Enum.GetValues<UnicodeCategory>().Length == UnicodeCategoryValueCount);
+            Debug.Assert(
+#if NET5_0_OR_GREATER
+                Enum.GetValues<UnicodeCategory>().Length 
+#else
+                Enum.GetValues(typeof(UnicodeCategory)).Length
+#endif
+                == UnicodeCategoryValueCount);
         }
 #endif
 
-        /// <summary>Gets a <see cref="BDD"/> that represents the specified <see cref="UnicodeCategory"/>.</summary>
-        public static BDD GetCategory(UnicodeCategory category) =>
+            /// <summary>Gets a <see cref="BDD"/> that represents the specified <see cref="UnicodeCategory"/>.</summary>
+            public static BDD GetCategory(UnicodeCategory category) =>
             Volatile.Read(ref s_categories[(int)category]) ??
             Interlocked.CompareExchange(ref s_categories[(int)category], BDD.Deserialize(UnicodeCategoryRanges.GetSerializedCategory(category)), null) ??
             s_categories[(int)category]!;

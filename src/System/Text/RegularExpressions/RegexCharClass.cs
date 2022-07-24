@@ -545,7 +545,7 @@ namespace System.Text.RegularExpressions
                 strLength -= 2;
             }
 
-#if REGEXGENERATOR
+#if REGEXGENERATOR || NETFRAMEWORK
             return StringExtensions.Create
 #else
             return string.Create
@@ -1229,7 +1229,7 @@ namespace System.Text.RegularExpressions
                 }
 
                 uint[]? cache = asciiLazyCache ?? Interlocked.CompareExchange(ref asciiLazyCache, new uint[CacheArrayLength], null) ?? asciiLazyCache;
-#if REGEXGENERATOR
+#if REGEXGENERATOR || !NET5_0_OR_GREATER
                 InterlockedExtensions.Or(ref cache[ch >> 4], bitsToSet);
 #else
                 Interlocked.Or(ref cache[ch >> 4], bitsToSet);
@@ -1428,7 +1428,11 @@ namespace System.Text.RegularExpressions
             StringBuilder? categoriesBuilder = null;
             if (categoryLength > 0)
             {
+#if NETFRAMEWORK
+                categoriesBuilder = new StringBuilder().Append(charClass.Substring(end, categoryLength));
+#else
                 categoriesBuilder = new StringBuilder().Append(charClass.AsSpan(end, categoryLength));
+#endif
             }
 
             return new RegexCharClass(IsNegated(charClass, start), ranges, categoriesBuilder, sub);
@@ -1521,7 +1525,7 @@ namespace System.Text.RegularExpressions
             // Get the pointer/length of the span to be able to pass it into string.Create.
             fixed (char* charsPtr = chars)
             {
-#if REGEXGENERATOR
+#if REGEXGENERATOR || NETFRAMEWORK
                 return StringExtensions.Create(
 #else
                 return string.Create(

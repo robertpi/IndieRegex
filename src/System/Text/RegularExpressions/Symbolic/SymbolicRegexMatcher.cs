@@ -164,6 +164,43 @@ namespace System.Text.RegularExpressions.Symbolic
             return new SymbolicRegexMatcher<TSet>(builder, rootNode, captureCount, findOptimizations, matchTimeout);
         }
 
+#if NETFRAMEWORK
+        private static ReadOnlySpan<byte> Log2DeBruijn => new byte[32]
+        {
+                    00, 09, 01, 10, 13, 21, 02, 29,
+                    11, 14, 16, 18, 22, 25, 03, 30,
+                    08, 12, 20, 28, 15, 17, 24, 07,
+                    19, 27, 23, 06, 26, 05, 04, 31
+        };
+
+        /// <summary>
+        /// Returns the integer (floor) log of the specified value, base 2.
+        /// Note that by convention, input value 0 returns 0 since Log(0) is undefined.
+        /// Does not directly use any hardware intrinsics, nor does it incur branching.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        private static int Log2SoftwareFallback(uint value)
+        {
+            // No AggressiveInlining due to large method size
+            // Has conventional contract 0->0 (Log(0) is undefined)
+
+            // Fill trailing zeros with ones, eg 00010010 becomes 00011111
+            value |= value >> 01;
+            value |= value >> 02;
+            value |= value >> 04;
+            value |= value >> 08;
+            value |= value >> 16;
+
+            // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
+            return Unsafe.AddByteOffset(
+                // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0b_0000_0111_1100_0100_1010_1100_1101_1101u
+                ref MemoryMarshal.GetReference(Log2DeBruijn),
+                // uint|long -> IntPtr cast on 32-bit platforms does expensive overflow checks not needed here
+                (IntPtr)(int)((value * 0x07C4ACDDu) >> 27));
+        }
+#endif
+
+
         /// <summary>Constructs matcher for given symbolic regex.</summary>
         private SymbolicRegexMatcher(SymbolicRegexBuilder<TSet> builder, SymbolicRegexNode<TSet> rootNode, int captureCount, RegexFindOptimizations findOptimizations, TimeSpan matchTimeout)
         {
@@ -179,7 +216,11 @@ namespace System.Text.RegularExpressions.Symbolic
             // BitOperations.Log2 gives the integer floor of the log, so the +1 below either rounds up with non-power-of-two
             // minterms or adds an extra bit with power-of-two minterms. The extra slot at index _minterms.Length is used to
             // represent an \n occurring at the very end of input, for supporting the \Z anchor.
+#if NETFRAMEWORK
+            _mintermsLog = Log2SoftwareFallback((uint)_minterms.Length) + 1;
+#else
             _mintermsLog = BitOperations.Log2((uint)_minterms.Length) + 1;
+#endif
             _mintermClassifier = builder._solver is UInt64Solver bv64 ?
                 bv64._classifier :
                 ((BitVectorSolver)(object)builder._solver)._classifier;
@@ -337,7 +378,11 @@ namespace System.Text.RegularExpressions.Symbolic
         private void CheckTimeout(long timeoutOccursAt)
         {
             Debug.Assert(_checkTimeout);
+#if NETFRAMEWORK
+            if (Environment.TickCount >= timeoutOccursAt)
+#else
             if (Environment.TickCount64 >= timeoutOccursAt)
+#endif
             {
                 throw new RegexMatchTimeoutException(string.Empty, string.Empty, TimeSpan.FromMilliseconds(_timeout));
             }
@@ -452,7 +497,11 @@ namespace System.Text.RegularExpressions.Symbolic
             if (_checkTimeout)
             {
                 // Using Environment.TickCount for efficiency instead of Stopwatch -- as in the non-DFA case.
+#if NETFRAMEWORK
+                timeoutOccursAt = Environment.TickCount + _timeout;
+#else
                 timeoutOccursAt = Environment.TickCount64 + _timeout;
+#endif
             }
 
             // Phase 1:
@@ -1220,8 +1269,19 @@ namespace System.Text.RegularExpressions.Symbolic
             Registers initialRegisters = perThreadData.InitialRegisters;
 
             // Initialize registers with -1, which means "not seen yet"
+#if NETFRAMEWORK
+            for (int iCapureStarts = 0; iCapureStarts < initialRegisters.CaptureStarts.Length; iCapureStarts++)
+            {
+                initialRegisters.CaptureStarts[iCapureStarts] = -1;
+            }
+            for (int iCaptureEnds = 0; iCaptureEnds < initialRegisters.CaptureEnds.Length; iCaptureEnds++)
+            {
+                initialRegisters.CaptureEnds[iCaptureEnds] = -1;
+            }
+#else
             Array.Fill(initialRegisters.CaptureStarts, -1);
             Array.Fill(initialRegisters.CaptureEnds, -1);
+#endif
 
             // Use two maps from state IDs to register values for the current and next set of states.
             // Note that these maps use insertion order, which is used to maintain priorities between states in a way
@@ -1242,10 +1302,17 @@ namespace System.Text.RegularExpressions.Symbolic
                 // i is guaranteed to be within bounds, so the position ID is a minterm ID
                 int mintermId = inputReader.GetPositionId(this, input, i);
 
-                foreach ((int sourceId, Registers sourceRegisters) in current.Values)
+#if NETFRAMEWORK
+                foreach (var value in current.Values)
                 {
-                    // Get or create the transitions
-                    int offset = DeltaOffset(sourceId, mintermId);
+                    var sourceId = value.Key;
+                    var sourceRegisters = value.Value;
+#else
+            foreach (var (sourceId, sourceRegisters) in current.Values)
+            {
+#endif
+                        // Get or create the transitions
+                        int offset = DeltaOffset(sourceId, mintermId);
                     (int, DerivativeEffect[])[] transitions = _capturingNfaDelta[offset] ??
                         CreateNewCapturingTransition(sourceId, mintermId, offset);
 
@@ -1288,8 +1355,15 @@ namespace System.Text.RegularExpressions.Symbolic
             }
 
             Debug.Assert(current.Count > 0);
+#if NETFRAMEWORK
+            foreach (var value in current.Values)
+            {
+                var endStateId = value.Key;
+                var endRegisters = value.Value;
+#else
             foreach (var (endStateId, endRegisters) in current.Values)
             {
+#endif
                 MatchingState<TSet> endState = GetState(GetCoreStateId(endStateId));
                 if (endState.IsNullableFor(GetCharKind<TInputReader>(input, iEnd, inputReader)))
                 {
@@ -1305,8 +1379,8 @@ namespace System.Text.RegularExpressions.Symbolic
         }
 #endif
 
-        /// <summary>Stores additional data for tracking capture start and end positions.</summary>
-        /// <remarks>The NFA simulation based third phase has one of these for each current state in the current set of live states.</remarks>
+            /// <summary>Stores additional data for tracking capture start and end positions.</summary>
+            /// <remarks>The NFA simulation based third phase has one of these for each current state in the current set of live states.</remarks>
         internal struct Registers
         {
             public Registers(int[] captureStarts, int[] captureEnds)
@@ -1726,7 +1800,11 @@ namespace System.Text.RegularExpressions.Symbolic
             /// <summary>Check if any underlying core state starts with a line anchor.</summary>
             public bool StartsWithLineAnchor(SymbolicRegexMatcher<TSet> matcher, in CurrentState state)
             {
+#if NET5_0_OR_GREATER
                 foreach (ref KeyValuePair<int, int> nfaState in CollectionsMarshal.AsSpan(state.NfaState!.NfaStateSet.Values))
+#else
+                foreach (KeyValuePair<int, int> nfaState in state.NfaState!.NfaStateSet.Values)
+#endif
                 {
                     if (matcher.GetState(matcher.GetCoreStateId(nfaState.Key)).StartsWithLineAnchor)
                     {
@@ -1740,7 +1818,11 @@ namespace System.Text.RegularExpressions.Symbolic
             /// <summary>Check if any underlying core state is nullable in the context of the next character kind.</summary>
             public bool IsNullableFor(SymbolicRegexMatcher<TSet> matcher, in CurrentState state, uint nextCharKind)
             {
+#if NET5_0_OR_GREATER
                 foreach (ref KeyValuePair<int, int> nfaState in CollectionsMarshal.AsSpan(state.NfaState!.NfaStateSet.Values))
+#else
+                foreach (KeyValuePair<int, int> nfaState in state.NfaState!.NfaStateSet.Values)
+#endif
                 {
                     if (matcher.GetState(matcher.GetCoreStateId(nfaState.Key)).IsNullableFor(nextCharKind))
                     {
@@ -1773,7 +1855,11 @@ namespace System.Text.RegularExpressions.Symbolic
             public int ExtractNullableCoreStateId(SymbolicRegexMatcher<TSet> matcher, in CurrentState state, ReadOnlySpan<char> input, int pos)
             {
                 uint nextCharKind = matcher.GetCharKind<FullInputReader>(input, pos, FullInputReaderInstance);
+#if NET5_0_OR_GREATER
                 foreach (ref KeyValuePair<int, int> nfaState in CollectionsMarshal.AsSpan(state.NfaState!.NfaStateSet.Values))
+#else
+                foreach (KeyValuePair<int, int> nfaState in state.NfaState!.NfaStateSet.Values)
+#endif
                 {
                     MatchingState<TSet> coreState = matcher.GetState(matcher.GetCoreStateId(nfaState.Key));
                     if (coreState.IsNullableFor(nextCharKind))
@@ -1790,7 +1876,11 @@ namespace System.Text.RegularExpressions.Symbolic
             /// <summary>Gets the length of any fixed-length marker that exists for this state, or -1 if there is none.</summary>
             public int FixedLength(SymbolicRegexMatcher<TSet> matcher, in CurrentState state, uint nextCharKind)
             {
+#if NET5_0_OR_GREATER
                 foreach (ref KeyValuePair<int, int> nfaState in CollectionsMarshal.AsSpan(state.NfaState!.NfaStateSet.Values))
+#else
+                foreach (KeyValuePair<int, int> nfaState in state.NfaState!.NfaStateSet.Values)
+#endif
                 {
                     MatchingState<TSet> coreState = matcher.GetState(matcher.GetCoreStateId(nfaState.Key));
                     if (coreState.IsNullableFor(nextCharKind))
@@ -1834,7 +1924,11 @@ namespace System.Text.RegularExpressions.Symbolic
                     // their next states.  For each source state, get its next states, adding each into
                     // our set (which exists purely for deduping purposes), and if we successfully added
                     // to the set, then add the known-unique state to the destination list.
+#if NET5_0_OR_GREATER
                     foreach (ref KeyValuePair<int, int> sourceState in CollectionsMarshal.AsSpan(sourceStates.Values))
+#else
+                    foreach (KeyValuePair<int, int> sourceState in sourceStates.Values)
+#endif
                     {
                         foreach (int nextState in GetNextStates(sourceState.Key, mintermId, matcher))
                         {
@@ -1878,7 +1972,11 @@ namespace System.Text.RegularExpressions.Symbolic
             /// <summary>Check if any underlying core state is unconditionally nullable.</summary>
             public bool IsNullable(SymbolicRegexMatcher<TSet> matcher, in CurrentState state)
             {
+#if NET5_0_OR_GREATER
                 foreach (ref KeyValuePair<int, int> nfaState in CollectionsMarshal.AsSpan(state.NfaState!.NfaStateSet.Values))
+#else
+                foreach (KeyValuePair<int, int> nfaState in state.NfaState!.NfaStateSet.Values)
+#endif
                 {
                     if (matcher.GetStateInfo(matcher.GetCoreStateId(nfaState.Key)).IsNullable)
                     {
@@ -1892,7 +1990,11 @@ namespace System.Text.RegularExpressions.Symbolic
             /// <summary>Check if any underlying core state can be nullable in some context.</summary>
             public bool CanBeNullable(SymbolicRegexMatcher<TSet> matcher, in CurrentState state)
             {
+#if NET5_0_OR_GREATER
                 foreach (ref KeyValuePair<int, int> nfaState in CollectionsMarshal.AsSpan(state.NfaState!.NfaStateSet.Values))
+#else
+                foreach (KeyValuePair<int, int> nfaState in state.NfaState!.NfaStateSet.Values)
+#endif
                 {
                     if (matcher.GetStateInfo(matcher.GetCoreStateId(nfaState.Key)).CanBeNullable)
                     {
@@ -1963,13 +2065,13 @@ namespace System.Text.RegularExpressions.Symbolic
         }
 #else
 
-            /// <summary>
-            /// Interface for mapping positions in the input to position IDs, which capture all the information necessary to
-            /// both take transitions and decide nullability. For positions of valid characters that are handled normally,
-            /// these IDs coincide with minterm IDs (i.e. indices to <see cref="_minterms"/>). Positions outside the bounds
-            /// of the input are mapped to -1. Optionally, an end-of-line as the very last character in the input may be
-            /// mapped to _minterms.Length for supporting the \Z anchor.
-            /// </summary>
+                /// <summary>
+                /// Interface for mapping positions in the input to position IDs, which capture all the information necessary to
+                /// both take transitions and decide nullability. For positions of valid characters that are handled normally,
+                /// these IDs coincide with minterm IDs (i.e. indices to <see cref="_minterms"/>). Positions outside the bounds
+                /// of the input are mapped to -1. Optionally, an end-of-line as the very last character in the input may be
+                /// mapped to _minterms.Length for supporting the \Z anchor.
+                /// </summary>
             private interface IInputReader
         {
             int GetPositionId(SymbolicRegexMatcher<TSet> matcher, ReadOnlySpan<char> input, int pos);

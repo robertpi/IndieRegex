@@ -5,7 +5,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Text.RegularExpressions
 {
-    [Obsolete(Obsoletions.RegexCompileToAssemblyMessage, DiagnosticId = Obsoletions.RegexCompileToAssemblyDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+    [Obsolete(Obsoletions.RegexCompileToAssemblyMessage
+#if NET5_0_OR_GREATER
+        ,DiagnosticId = Obsoletions.RegexCompileToAssemblyDiagId
+        ,UrlFormat = Obsoletions.SharedUrlFormat
+#endif
+        )]
     public class RegexCompilationInfo
     {
         private string _pattern;
@@ -44,7 +49,9 @@ namespace System.Text.RegularExpressions
         public string Name
         {
             get => _name;
+#if NET5_0_OR_GREATER
             [MemberNotNull(nameof(_name))]
+#endif
             set
             {
                 if (string.IsNullOrEmpty(value))
@@ -58,7 +65,9 @@ namespace System.Text.RegularExpressions
         public string Namespace
         {
             get => _nspace;
+#if NET5_0_OR_GREATER
             [MemberNotNull(nameof(_nspace))]
+#endif
             set
             {
 #if NET6_0_OR_GREATER
@@ -75,7 +84,9 @@ namespace System.Text.RegularExpressions
         public string Pattern
         {
             get => _pattern;
+#if NET5_0_OR_GREATER
             [MemberNotNull(nameof(_pattern))]
+#endif
             set
             {
 #if NET6_0_OR_GREATER

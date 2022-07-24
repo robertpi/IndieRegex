@@ -283,7 +283,11 @@ namespace System.Text.RegularExpressions
                 _matchTimeout = matchTimeout;
             }
 
-            public override bool Equals([NotNullWhen(true)] object? obj) =>
+            public override bool Equals(
+#if !NETFRAMEWORK
+                [NotNullWhen(true)] 
+#endif
+                object? obj) =>
                 obj is Key other && Equals(other);
 
             public bool Equals(Key other) =>

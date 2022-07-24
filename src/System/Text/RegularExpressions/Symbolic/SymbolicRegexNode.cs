@@ -705,7 +705,11 @@ namespace System.Text.RegularExpressions.Symbolic
                 // If this succeeds T is returned in tail.
                 // Note that this method currently only succeeds when both node and prefix are in right associative
                 // form (if they are concats).
-                static bool TrySkipPrefix(SymbolicRegexNode<TSet> node, SymbolicRegexNode<TSet> prefix, [NotNullWhen(true)] out SymbolicRegexNode<TSet>? tail)
+                static bool TrySkipPrefix(SymbolicRegexNode<TSet> node, SymbolicRegexNode<TSet> prefix,
+#if !NETFRAMEWORK
+                    [NotNullWhen(true)] 
+#endif
+                    out SymbolicRegexNode<TSet>? tail)
                 {
                     tail = null;
                     // Walk over the prefix and the node in lockstep
@@ -767,7 +771,11 @@ namespace System.Text.RegularExpressions.Symbolic
         /// <param name="result">the folded regex that eliminates alternation, or null if the operation fails</param>
         /// <param name="rightEffects">accumulated effects from the right side</param>
         /// <returns>whether folding was successful</returns>
-        private static bool TryFoldAlternation(SymbolicRegexBuilder<TSet> builder, SymbolicRegexNode<TSet> left, SymbolicRegexNode<TSet> right, [NotNullWhen(true)] out SymbolicRegexNode<TSet>? result,
+        private static bool TryFoldAlternation(SymbolicRegexBuilder<TSet> builder, SymbolicRegexNode<TSet> left, SymbolicRegexNode<TSet> right,
+#if !NETFRAMEWORK
+            [NotNullWhen(true)] 
+#endif
+            out SymbolicRegexNode<TSet>? result,
             SymbolicRegexNode<TSet>? rightEffects = null)
         {
             // The rules below assume that the right side subsumes the left side
@@ -834,7 +842,10 @@ namespace System.Text.RegularExpressions.Symbolic
 
             // This rule tries to find a prefix P that the right side has such that right is PR and left is equivalent to R
             static bool TrySplitConcatSubsumption(SymbolicRegexBuilder<TSet> builder, SymbolicRegexNode<TSet> left, SymbolicRegexNode<TSet> right,
-                [NotNullWhen(true)] out SymbolicRegexNode<TSet>? prefix)
+#if !NETFRAMEWORK
+                [NotNullWhen(true)]
+#endif
+                 out SymbolicRegexNode<TSet>? prefix)
             {
                 List<SymbolicRegexNode<TSet>> prefixElements = new();
                 SymbolicRegexNode<TSet> suffix = right;

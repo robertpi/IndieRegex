@@ -82,8 +82,10 @@ namespace System.Text.RegularExpressions
             // if no options are ever used.
         }
 
+#if NET5_0_OR_GREATER
         [UnconditionalSuppressMessage("AotAnalysis", "IL3050:RequiresDynamicCode",
             Justification = "Compiled Regex is only used when RuntimeFeature.IsDynamicCodeCompiled is true. Workaround https://github.com/dotnet/linker/issues/2715.")]
+#endif
         internal Regex(string pattern, RegexOptions options, TimeSpan matchTimeout, CultureInfo? culture)
         {
             // Validate arguments.
@@ -102,7 +104,11 @@ namespace System.Text.RegularExpressions
             }
             else
             {
-                if (RuntimeFeature.IsDynamicCodeCompiled && (options & RegexOptions.Compiled) != 0)
+                if (
+#if !NETFRAMEWORK
+                    RuntimeFeature.IsDynamicCodeCompiled && 
+#endif
+                    (options & RegexOptions.Compiled) != 0)
                 {
                     // If the compile option is set and compilation is supported, then compile the code.
                     // If the compiler can't compile this regex, it'll return null, and we'll fall back
@@ -116,7 +122,11 @@ namespace System.Text.RegularExpressions
         }
 
         /// <summary>Stores the supplied arguments and capture information, returning the parsed expression.</summary>
-        private RegexTree Init(string pattern, RegexOptions options, TimeSpan matchTimeout, [NotNull] ref CultureInfo? culture)
+        private RegexTree Init(string pattern, RegexOptions options, TimeSpan matchTimeout,
+#if !NETFRAMEWORK
+            [NotNull] 
+#endif
+            ref CultureInfo? culture)
         {
             this.pattern = pattern;
             roptions = options;
@@ -175,7 +185,11 @@ namespace System.Text.RegularExpressions
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) =>
             throw new PlatformNotSupportedException();
 
-        [CLSCompliant(false), DisallowNull]
+        [CLSCompliant(false),
+#if !NETFRAMEWORK
+            DisallowNull 
+#endif
+            ]
         protected IDictionary? Caps
         {
             get => caps;
@@ -190,7 +204,11 @@ namespace System.Text.RegularExpressions
             }
         }
 
-        [CLSCompliant(false), DisallowNull]
+        [CLSCompliant(false),
+#if !NETFRAMEWORK
+            DisallowNull 
+#endif
+            ]
         protected IDictionary? CapNames
         {
             get => capnames;
@@ -215,15 +233,30 @@ namespace System.Text.RegularExpressions
         private static RegexRunnerFactory? Compile(string pattern, RegexTree regexTree, RegexOptions options, bool hasTimeout) =>
             RegexCompiler.Compile(pattern, regexTree, options, hasTimeout);
 
-        [Obsolete(Obsoletions.RegexCompileToAssemblyMessage, DiagnosticId = Obsoletions.RegexCompileToAssemblyDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+        [Obsolete(Obsoletions.RegexCompileToAssemblyMessage
+#if NET5_0_OR_GREATER
+            ,DiagnosticId = Obsoletions.RegexCompileToAssemblyDiagId
+            ,UrlFormat = Obsoletions.SharedUrlFormat
+#endif
+            )]
         public static void CompileToAssembly(RegexCompilationInfo[] regexinfos, AssemblyName assemblyname) =>
             CompileToAssembly(regexinfos, assemblyname, null, null);
 
-        [Obsolete(Obsoletions.RegexCompileToAssemblyMessage, DiagnosticId = Obsoletions.RegexCompileToAssemblyDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+        [Obsolete(Obsoletions.RegexCompileToAssemblyMessage
+#if NET5_0_OR_GREATER
+            ,DiagnosticId = Obsoletions.RegexCompileToAssemblyDiagId
+            ,UrlFormat = Obsoletions.SharedUrlFormat
+#endif
+            )]
         public static void CompileToAssembly(RegexCompilationInfo[] regexinfos, AssemblyName assemblyname, CustomAttributeBuilder[]? attributes) =>
             CompileToAssembly(regexinfos, assemblyname, attributes, null);
 
-        [Obsolete(Obsoletions.RegexCompileToAssemblyMessage, DiagnosticId = Obsoletions.RegexCompileToAssemblyDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+        [Obsolete(Obsoletions.RegexCompileToAssemblyMessage
+#if NET5_0_OR_GREATER
+            ,DiagnosticId = Obsoletions.RegexCompileToAssemblyDiagId
+            ,UrlFormat = Obsoletions.SharedUrlFormat
+#endif
+            )]
         public static void CompileToAssembly(RegexCompilationInfo[] regexinfos, AssemblyName assemblyname, CustomAttributeBuilder[]? attributes, string? resourceFile) =>
             throw new PlatformNotSupportedException(SR.PlatformNotSupported_CompileToAssembly);
 
@@ -480,14 +513,27 @@ namespace System.Text.RegularExpressions
 
         /// <summary>Internal worker which will scan the passed in string <paramref name="input"/> for all matches, and will call <paramref name="callback"/> for each match found.</summary>
         internal void RunAllMatchesWithCallback<TState>(string? input, int startat, ref TState state, MatchCallback<TState> callback, RegexRunnerMode mode, bool reuseMatchObject) =>
-            RunAllMatchesWithCallback(input, (ReadOnlySpan<char>)input, startat, ref state, callback, mode, reuseMatchObject);
+            RunAllMatchesWithCallback(input,
+#if NETFRAMEWORK
+                input == null ? null : new ReadOnlySpan<char>(input.ToCharArray())
+#else
+                (ReadOnlySpan<char>)input
+#endif
+                , startat, ref state, callback, mode, reuseMatchObject);
 
         internal void RunAllMatchesWithCallback<TState>(ReadOnlySpan<char> input, int startat, ref TState state, MatchCallback<TState> callback, RegexRunnerMode mode, bool reuseMatchObject) =>
             RunAllMatchesWithCallback(inputString: null, input, startat, ref state, callback, mode, reuseMatchObject);
 
         private void RunAllMatchesWithCallback<TState>(string? inputString, ReadOnlySpan<char> inputSpan, int startat, ref TState state, MatchCallback<TState> callback, RegexRunnerMode mode, bool reuseMatchObject)
         {
-            Debug.Assert(inputString is null || inputSpan.SequenceEqual(inputString));
+            Debug.Assert(inputString is null ||
+#if NETFRAMEWORK
+                inputSpan.SequenceEqual(new ReadOnlySpan<char>(inputString.ToCharArray()))
+#else
+                inputSpan.SequenceEqual(inputString)
+#endif
+
+                );
             Debug.Assert((uint)startat <= (uint)inputSpan.Length);
 
             RegexRunner runner = Interlocked.Exchange(ref _runner, null) ?? CreateRunner();

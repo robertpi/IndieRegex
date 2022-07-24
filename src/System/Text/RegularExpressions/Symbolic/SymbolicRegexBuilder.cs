@@ -323,7 +323,11 @@ namespace System.Text.RegularExpressions.Symbolic
                         SymbolicRegexNode<TNewSet>[] reverseTransformed = new SymbolicRegexNode<TNewSet>[concatElements.Count];
                         for (int i = 0; i < reverseTransformed.Length; i++)
                         {
+#if NETFRAMEWORK
+                            reverseTransformed[i] = Transform(concatElements[concatElements.Count - (i + 1)], builder, setTransformer);
+#else
                             reverseTransformed[i] = Transform(concatElements[^(i + 1)], builder, setTransformer);
+#endif 
                         }
                         return builder.CreateConcatAlreadyReversed(reverseTransformed);
                     }
