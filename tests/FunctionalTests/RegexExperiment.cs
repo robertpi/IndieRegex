@@ -1,6 +1,7 @@
 // Licensed to the .NET Foundation under one or more agreements.if #DEBUG
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +11,7 @@ using Xunit.Abstractions;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     /// <summary>
     /// This class is to be ignored wrt unit tests in Release mode.

@@ -13,11 +13,12 @@
 // methods to push new subpattern match results into (or remove
 // backtracked results from) the Match instance.
 
+using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace System.Text.RegularExpressions
+namespace IndieSystem.Text.RegularExpressions
 {
     public abstract class RegexRunner
     {

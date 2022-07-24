@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 
-namespace System.Text.RegularExpressions.Symbolic
+namespace IndieSystem.Text.RegularExpressions.Symbolic
 {
     internal sealed partial class SymbolicRegexMatcher<TSet>
     {

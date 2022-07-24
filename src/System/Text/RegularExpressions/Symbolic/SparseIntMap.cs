@@ -1,10 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace System.Text.RegularExpressions.Symbolic
+namespace IndieSystem.Text.RegularExpressions.Symbolic
 {
     /// <summary>An insertion-ordered map that supports small int keys.</summary>
     /// <remarks>Uses a sparse array of the same size as the space of keys for efficient lookups.</remarks>

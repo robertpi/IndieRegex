@@ -1,13 +1,15 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace System.Text.RegularExpressions
+namespace IndieSystem.Text.RegularExpressions
 {
     /// <summary>Detects various forms of prefixes in the regular expression that can help FindFirstChars optimize its search.</summary>
     internal static class RegexPrefixAnalyzer

@@ -4,7 +4,7 @@
 using System;
 using Microsoft.CodeAnalysis;
 
-namespace System.Text.RegularExpressions.Generator
+namespace IndieSystem.Text.RegularExpressions.Generator
 {
     internal static class DiagnosticDescriptors
     {

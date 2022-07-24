@@ -9,7 +9,7 @@ using System.Tests;
 // using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     public static class RegexAssert
     {

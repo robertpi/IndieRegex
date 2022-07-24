@@ -1,9 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Diagnostics;
 
-namespace System.Text.RegularExpressions.Symbolic
+namespace IndieSystem.Text.RegularExpressions.Symbolic
 {
     /// <summary>Misc information of structural properties of a <see cref="SymbolicRegexNode{S}"/> that is computed bottom up.</summary>
     internal readonly struct SymbolicRegexInfo : IEquatable<SymbolicRegexInfo>

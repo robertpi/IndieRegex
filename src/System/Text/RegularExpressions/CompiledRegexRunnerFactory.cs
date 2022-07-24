@@ -4,7 +4,7 @@
 using System.Globalization;
 using System.Reflection.Emit;
 
-namespace System.Text.RegularExpressions
+namespace IndieSystem.Text.RegularExpressions
 {
     internal sealed class CompiledRegexRunnerFactory : RegexRunnerFactory
     {

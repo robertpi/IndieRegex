@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace System.Text.RegularExpressions
+namespace IndieSystem.Text.RegularExpressions
 {
     internal static class ReflectionHelper
     {

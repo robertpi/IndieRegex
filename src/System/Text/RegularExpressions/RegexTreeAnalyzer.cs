@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace System.Text.RegularExpressions
+namespace IndieSystem.Text.RegularExpressions
 {
     /// <summary>Analyzes a <see cref="RegexTree"/> of <see cref="RegexNode"/>s to produce data on the tree structure, in particular in support of code generation.</summary>
     internal static class RegexTreeAnalyzer

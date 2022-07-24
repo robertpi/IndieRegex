@@ -1,13 +1,15 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     public static class RegexHelpers
     {
@@ -49,7 +51,7 @@ namespace System.Text.RegularExpressions.Tests
             return start == 0;
         }
 
-        public static async Task<Regex> GetRegexAsync(RegexEngine engine, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern, RegexOptions options, Globalization.CultureInfo culture)
+        public static async Task<Regex> GetRegexAsync(RegexEngine engine, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern, RegexOptions options, CultureInfo culture)
         {
             using (new System.Tests.ThreadCultureChange(culture))
             {

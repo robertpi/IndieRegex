@@ -1,13 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace System.Text.RegularExpressions.Symbolic
+namespace IndieSystem.Text.RegularExpressions.Symbolic
 {
     /// <summary>
     /// Provides functionality to build character sets represented as <see cref="BDD"/>s

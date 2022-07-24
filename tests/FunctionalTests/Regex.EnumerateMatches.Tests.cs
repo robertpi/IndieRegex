@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     public class RegexEnumerateMatchesTests
     {

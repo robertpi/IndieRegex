@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -14,7 +16,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
 
-namespace System.Text.RegularExpressions.Generator
+namespace IndieSystem.Text.RegularExpressions.Generator
 {
     /// <summary>
     /// Roslyn analyzer that searches for invocations of the Regex constructors, or the

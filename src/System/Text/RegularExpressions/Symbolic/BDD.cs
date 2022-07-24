@@ -1,13 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Numerics;
 
-namespace System.Text.RegularExpressions.Symbolic
+namespace IndieSystem.Text.RegularExpressions.Symbolic
 {
     /// <summary>
     /// Represents nodes in a Binary Decision Diagram (BDD), which compactly represent sets of integers and allow for fast

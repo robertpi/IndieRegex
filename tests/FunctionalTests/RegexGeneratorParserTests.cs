@@ -3,12 +3,13 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     // Tests don't actually use reflection emit, but they do generate assembly via Roslyn in-memory at run time and expect it to be JIT'd.
     // The tests also use typeof(object).Assembly.Location, which returns an empty string on wasm.
@@ -246,7 +247,7 @@ namespace System.Text.RegularExpressions.Tests
                     private static partial Regex InvalidCtor();
                 }
 
-                namespace System.Text.RegularExpressions
+                namespace IndieSystem.Text.RegularExpressions
                 {
                     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
                     public sealed class RegexGeneratorAttribute : Attribute
@@ -269,7 +270,7 @@ namespace System.Text.RegularExpressions.Tests
                     private static partial Regex InvalidCtor();
                 }
 
-                namespace System.Text.RegularExpressions
+                namespace IndieSystem.Text.RegularExpressions
                 {
                     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
                     public sealed class RegexGeneratorAttribute : Attribute
@@ -732,7 +733,7 @@ namespace System.Text.RegularExpressions.Tests
         public async Task MultipleTypeDefinitions_DoesntBreakGeneration()
         {
             byte[] referencedAssembly = RegexGeneratorHelper.CreateAssemblyImage(@"
-                namespace System.Text.RegularExpressions;
+                namespace IndieSystem.Text.RegularExpressions;
 
                 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
                 internal sealed class RegexGeneratorAttribute : Attribute

@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using IndieSystem.Text.RegularExpressions;
 using BenchmarkDotNet.Attributes;
 
 public class AsmRegexBenchmark

@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace System.Text.RegularExpressions.Symbolic
+namespace IndieSystem.Text.RegularExpressions.Symbolic
 {
     /// <summary>Represents a doubly linked list data structure.</summary>
     /// <typeparam name="T">Element type of the list that must be not null</typeparam>

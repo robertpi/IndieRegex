@@ -86,7 +86,7 @@ namespace System.Threading
     }
 }
 
-namespace System.Text.RegularExpressions
+namespace IndieSystem.Text.RegularExpressions
 {
     internal sealed class RegexReplacement
     {

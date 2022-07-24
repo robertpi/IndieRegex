@@ -3,10 +3,10 @@
 
 using System.Globalization;
 using Xunit;
-using System.Text.RegularExpressions.Symbolic;
+using IndieSystem.Text.RegularExpressions.Symbolic;
 using System.Collections.Generic;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     public class SymbolicRegexTests
     {

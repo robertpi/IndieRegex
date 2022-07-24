@@ -1,6 +1,7 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -15,7 +16,7 @@ using Microsoft.CodeAnalysis.DotnetRuntime.Extensions;
 
 [assembly: System.Resources.NeutralResourcesLanguage("en-us")]
 
-namespace System.Text.RegularExpressions.Generator
+namespace IndieSystem.Text.RegularExpressions.Generator
 {
     /// <summary>Generates C# source code to implement regular expressions.</summary>
     [Generator(LanguageNames.CSharp)]

@@ -4,7 +4,7 @@
 using System.Globalization;
 using Xunit;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     public class RegexFindOptimizationsTests
     {

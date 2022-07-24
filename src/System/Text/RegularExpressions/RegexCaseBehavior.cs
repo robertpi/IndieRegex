@@ -3,7 +3,7 @@
 
 using System.Globalization;
 
-namespace System.Text.RegularExpressions
+namespace IndieSystem.Text.RegularExpressions
 {
     /// <summary>
     /// When a regular expression specifies the option <see cref="RegexOptions.IgnoreCase"/> then comparisons between the input and the

@@ -8,11 +8,12 @@
 // author:    Dan Lewis (dlewis@gmx.co.uk)
 //         (c) 2002
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     public class MonoTests
     {

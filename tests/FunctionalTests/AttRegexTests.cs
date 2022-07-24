@@ -64,12 +64,13 @@
 // -------------------------------------
 // Then some inputs were deleted / tweaked based on expected differences in behavior.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     public class AttRegexTests
     {

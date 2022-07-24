@@ -5,7 +5,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 
-namespace System.Text.RegularExpressions
+namespace IndieSystem.Text.RegularExpressions
 {
     /// <summary>
     /// Provides the core data describing a parsed <see cref="RegexNode"/> tree, along with necessary

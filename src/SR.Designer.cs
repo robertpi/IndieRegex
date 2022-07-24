@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Text.RegularExpressions{
+namespace IndieSystem.Text.RegularExpressions{
     using System;
     
     

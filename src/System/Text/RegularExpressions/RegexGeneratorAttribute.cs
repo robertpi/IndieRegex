@@ -1,10 +1,11 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-namespace System.Text.RegularExpressions;
+namespace IndieSystem.Text.RegularExpressions;
 
 /// <summary>Instructs the System.Text.RegularExpressions source generator to generate an implementation of the specified regular expression.</summary>
 /// <remarks>The generator associated with this attribute only supports C#.  It only supplies an implementation when applied to static, partial, parameterless, non-generic methods that are typed to return <see cref="Regex"/>.</remarks>

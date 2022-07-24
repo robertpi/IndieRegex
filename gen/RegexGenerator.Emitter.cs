@@ -1,6 +1,8 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
+using System.Text;
 using System.Buffers.Binary;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -21,7 +23,7 @@ using Microsoft.CodeAnalysis.CSharp;
 // Most changes made to this file should be kept in sync, so far as bug fixes and relevant optimizations
 // are concerned.
 
-namespace System.Text.RegularExpressions.Generator
+namespace IndieSystem.Text.RegularExpressions.Generator
 {
     public partial class RegexGenerator
     {

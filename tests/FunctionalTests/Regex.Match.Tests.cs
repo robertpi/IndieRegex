@@ -1,6 +1,7 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -12,7 +13,7 @@ using System.Tests;
 using Xunit;
 using Xunit.Sdk;
 
-namespace System.Text.RegularExpressions.Tests
+namespace IndieSystem.Text.RegularExpressions.Tests
 {
     public partial class RegexMatchTests
     {
@@ -1927,12 +1928,12 @@ namespace System.Text.RegularExpressions.Tests
             Assert.True(m.Success);
             RegexAssert.Equal("abc", m);
 
-            var m2 = System.Text.RegularExpressions.Match.Synchronized(m);
+            var m2 = IndieSystem.Text.RegularExpressions.Match.Synchronized(m);
             Assert.Same(m, m2);
             Assert.True(m2.Success);
             RegexAssert.Equal("abc", m2);
 
-            AssertExtensions.Throws<ArgumentNullException>("inner", () => System.Text.RegularExpressions.Match.Synchronized(null));
+            AssertExtensions.Throws<ArgumentNullException>("inner", () => IndieSystem.Text.RegularExpressions.Match.Synchronized(null));
         }
 
         /// <summary>
