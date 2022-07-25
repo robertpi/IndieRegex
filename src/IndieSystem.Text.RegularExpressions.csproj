@@ -7,6 +7,9 @@
 	<EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="ValueTuple.cs" />
+  </ItemGroup>
+  <ItemGroup>
 	  <!-- Common or Common-branched source files -->
     <Compile Include="..\common\RequiresDynamicCodeAttribute.cs" Link="Common\RequiresDynamicCodeAttribute.cs" />
     <Compile Include="..\common\StringSyntaxAttribute.cs" Link="Common\StringSyntaxAttribute.cs" />
@@ -16,13 +19,16 @@
     <Compile Include="..\common\ValueListBuilder.cs" Link="Common\ValueListBuilder.cs" />
     <Compile Include="..\common\ValueListBuilder.Pop.cs" Link="Common\ValueListBuilder.Pop.cs" />
   </ItemGroup>
-  <ItemGroup  Condition="'$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'netstandard2.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'netstandard2.0'">
 	<PackageReference Include="System.Buffers" Version="4.5.1" />
 	<PackageReference Include="System.Runtime" Version="4.3.1" />
 	<PackageReference Include="System.Memory" Version="4.5.5" />
 	<PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
   </ItemGroup>
-	<ItemGroup  Condition="'$(TargetFramework)' == 'netstandard2.0'">
+	<ItemGroup Condition="('$(TargetFramework)' == 'net461')">
+		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
 		<PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
 	</ItemGroup>
 
