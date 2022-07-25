@@ -50,7 +50,4 @@
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
     <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="System\Buffers\" />
-  </ItemGroup>
 </Project>
