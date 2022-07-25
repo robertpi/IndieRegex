@@ -86,16 +86,6 @@ namespace IndieSystem.Text.RegularExpressions.Tests
                 if (PlatformDetection.IsNetCore)
                 {
                     yield return RegexEngine.NonBacktracking;
-
-                    if (PlatformDetection.IsReflectionEmitSupported && // the source generator doesn't use reflection emit, but it does use Roslyn for the equivalent
-                        PlatformDetection.IsNotMobile &&
-                        PlatformDetection.IsNotBrowser)
-                    {
-                        yield return RegexEngine.SourceGenerated;
-
-                        // TODO-NONBACKTRACKING:
-                        // yield return RegexEngine.NonBacktrackingSourceGenerated;
-                    }
                 }
             }
         }
@@ -110,11 +100,6 @@ namespace IndieSystem.Text.RegularExpressions.Tests
                 Assert.Null(matchTimeout);
             }
 
-            if (engine == RegexEngine.SourceGenerated)
-            {
-                return await RegexGeneratorHelper.SourceGenRegexAsync(pattern, options, matchTimeout);
-            }
-
             // TODO-NONBACKTRACKING
             // - Handle NonBacktrackingSourceGenerated
 
@@ -126,11 +111,6 @@ namespace IndieSystem.Text.RegularExpressions.Tests
 
         public static async Task<Regex[]> GetRegexesAsync(RegexEngine engine, params (string pattern, RegexOptions? options, TimeSpan? matchTimeout)[] regexes)
         {
-            if (engine == RegexEngine.SourceGenerated)
-            {
-                return await RegexGeneratorHelper.SourceGenRegexAsync(regexes);
-            }
-
             // TODO-NONBACKTRACKING
             // - Handle NonBacktrackingSourceGenerated
 
@@ -151,7 +131,6 @@ namespace IndieSystem.Text.RegularExpressions.Tests
         {
             RegexEngine.Interpreter => RegexOptions.None,
             RegexEngine.Compiled => RegexOptions.Compiled,
-            RegexEngine.SourceGenerated => RegexOptions.Compiled,
             RegexEngine.NonBacktracking => RegexOptionNonBacktracking,
             RegexEngine.NonBacktrackingSourceGenerated => RegexOptionNonBacktracking | RegexOptions.Compiled,
             _ => throw new ArgumentException($"Unknown engine: {engine}"),
@@ -179,7 +158,6 @@ namespace IndieSystem.Text.RegularExpressions.Tests
         Interpreter,
         Compiled,
         NonBacktracking,
-        SourceGenerated,
         NonBacktrackingSourceGenerated,
     }
 

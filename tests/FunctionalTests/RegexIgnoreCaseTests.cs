@@ -133,24 +133,6 @@ namespace IndieSystem.Text.RegularExpressions.Tests
             Assert.True(regex.IsMatch("iI"));
         }
 
-        [Fact]
-        // This test creates a source generated engine for each of the ~870 cultures and ensures the result compiles. This test alone takes around 30
-        // seconds on a fast machine, so marking as OuterLoop.
-        [OuterLoop]
-        public async Task SourceGenerator_Supports_All_Cultures()
-        {
-            foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
-            {
-                using (new ThreadCultureChange(culture))
-                {
-                    // This test will try to emit code that looks like: textInfo = CultureInfo.GetCultureInfo(CurrentCulture.Name).TextInfo
-                    // so we will validate in this test that we are able to do that for all cultures and that GetCultureInfo returns a valid Culture.
-                    Regex r = await RegexHelpers.GetRegexAsync(RegexEngine.SourceGenerated, @"(.)\1", RegexOptions.IgnoreCase);
-                    Assert.True(r.IsMatch("Aa"));
-                }
-            }
-        }
-
         // This test takes a long time to run since it needs to compute all possible lowercase mappings across
         // 3 different cultures and then creates Regex matches for all of our engines for each mapping.
         [OuterLoop]
