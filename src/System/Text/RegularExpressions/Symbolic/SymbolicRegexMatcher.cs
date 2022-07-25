@@ -165,7 +165,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
             return new SymbolicRegexMatcher<TSet>(builder, rootNode, captureCount, findOptimizations, matchTimeout);
         }
 
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
         private static ReadOnlySpan<byte> Log2DeBruijn => new byte[32]
         {
                     00, 09, 01, 10, 13, 21, 02, 29,
@@ -217,7 +217,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
             // BitOperations.Log2 gives the integer floor of the log, so the +1 below either rounds up with non-power-of-two
             // minterms or adds an extra bit with power-of-two minterms. The extra slot at index _minterms.Length is used to
             // represent an \n occurring at the very end of input, for supporting the \Z anchor.
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             _mintermsLog = Log2SoftwareFallback((uint)_minterms.Length) + 1;
 #else
             _mintermsLog = BitOperations.Log2((uint)_minterms.Length) + 1;
@@ -379,7 +379,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
         private void CheckTimeout(long timeoutOccursAt)
         {
             Debug.Assert(_checkTimeout);
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             if (Environment.TickCount >= timeoutOccursAt)
 #else
             if (Environment.TickCount64 >= timeoutOccursAt)
@@ -498,7 +498,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
             if (_checkTimeout)
             {
                 // Using Environment.TickCount for efficiency instead of Stopwatch -- as in the non-DFA case.
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                 timeoutOccursAt = Environment.TickCount + _timeout;
 #else
                 timeoutOccursAt = Environment.TickCount64 + _timeout;
@@ -1270,7 +1270,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
             Registers initialRegisters = perThreadData.InitialRegisters;
 
             // Initialize registers with -1, which means "not seen yet"
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             for (int iCapureStarts = 0; iCapureStarts < initialRegisters.CaptureStarts.Length; iCapureStarts++)
             {
                 initialRegisters.CaptureStarts[iCapureStarts] = -1;
@@ -1303,13 +1303,13 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
                 // i is guaranteed to be within bounds, so the position ID is a minterm ID
                 int mintermId = inputReader.GetPositionId(this, input, i);
 
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                 foreach (var value in current.Values)
                 {
                     var sourceId = value.Key;
                     var sourceRegisters = value.Value;
 #else
-            foreach (var (sourceId, sourceRegisters) in current.Values)
+                foreach (var (sourceId, sourceRegisters) in current.Values)
             {
 #endif
                         // Get or create the transitions
@@ -1356,7 +1356,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
             }
 
             Debug.Assert(current.Count > 0);
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             foreach (var value in current.Values)
             {
                 var endStateId = value.Key;

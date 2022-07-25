@@ -38,7 +38,7 @@ namespace IndieSystem.Text.RegularExpressions
             Debug.Assert(concat.Kind == RegexNodeKind.Concatenate, $"Expected Concatenate, got {concat.Kind}");
 
             var vsb = new ValueStringBuilder(stackalloc char[256]);
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             // string can't be stackalloc-ed
             var strings = new ValueListBuilder<string>(new string[4]);
 #else

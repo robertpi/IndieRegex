@@ -68,8 +68,11 @@ namespace IndieSystem.Text.RegularExpressions
         /// </remarks>
         private static TimeSpan InitDefaultMatchTimeout()
         {
+#if NET47_OR_GREATER || NETCOREAPP
             object? defaultTimeout = AppContext.GetData(DefaultMatchTimeout_ConfigKeyName);
-
+#else
+            object? defaultTimeout = InfiniteMatchTimeout;
+#endif
             if (defaultTimeout is not TimeSpan defaultMatchTimeOut)
             {
                 // If not default was specified in AppContext, default to infinite.

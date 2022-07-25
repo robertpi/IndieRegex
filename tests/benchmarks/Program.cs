@@ -32,7 +32,7 @@ namespace Benchmarks.Trace
 
         private static void ExecuteWithJetbrainsTools(string[] args)
         {
-            HashSet<string> hashSet = new HashSet<string>(args.Where(a => a != "-jetbrains").Select(a => a.ToLowerInvariant()));
+            HashSet<string> hashSet = new HashSet<string>(args.Select(a => a.ToLowerInvariant()));
             var benchmarkTypes = typeof(Program).Assembly.GetTypes().Where(t => hashSet.Contains(t.Name.ToLowerInvariant()));
             foreach (var benchmarkType in benchmarkTypes)
             {
@@ -49,33 +49,6 @@ namespace Benchmarks.Trace
                         }
                         GC.Collect();
                         GC.WaitForPendingFinalizers();
-
-                        if ((JetBrains.Profiler.Api.MeasureProfiler.GetFeatures() & JetBrains.Profiler.Api.MeasureFeatures.Ready) != 0)
-                        {
-                            Console.WriteLine("  Collecting Data...");
-                            JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData(groupName);
-                            for (var i = 0; i < 100_000; i++)
-                            {
-                                method.Invoke(benchmarkInstance, null);
-                            }
-                            JetBrains.Profiler.Api.MeasureProfiler.StopCollectingData();
-                            JetBrains.Profiler.Api.MeasureProfiler.SaveData(groupName);
-                            GC.Collect();
-                            GC.WaitForPendingFinalizers();
-                        }
-
-                        if ((JetBrains.Profiler.Api.MemoryProfiler.GetFeatures() & JetBrains.Profiler.Api.MemoryFeatures.Ready) != 0)
-                        {
-                            Console.WriteLine("  Getting memory snapshot...");
-                            JetBrains.Profiler.Api.MemoryProfiler.ForceGc();
-                            JetBrains.Profiler.Api.MemoryProfiler.CollectAllocations(true);
-                            for (var i = 0; i < 100_000; i++)
-                            {
-                                method.Invoke(benchmarkInstance, null);
-                            }
-                            JetBrains.Profiler.Api.MemoryProfiler.GetSnapshot(groupName);
-                            JetBrains.Profiler.Api.MemoryProfiler.CollectAllocations(false);
-                        }
                     }
                 }
                 Console.WriteLine("Done.");

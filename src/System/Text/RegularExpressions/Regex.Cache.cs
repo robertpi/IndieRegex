@@ -285,7 +285,7 @@ namespace IndieSystem.Text.RegularExpressions
             }
 
             public override bool Equals(
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
                 [NotNullWhen(true)] 
 #endif
                 object? obj) =>

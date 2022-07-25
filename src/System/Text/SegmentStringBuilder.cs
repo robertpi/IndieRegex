@@ -74,7 +74,7 @@ namespace System.Text
                 length += span[i].Length;
             }
 
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             var dest = new Span<char>(new char[length]);
             Span<ReadOnlyMemory<char>> localSpan = this.AsSpan();
             for (int i = 0; i < localSpan.Length; i++)

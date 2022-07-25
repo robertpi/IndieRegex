@@ -8,19 +8,19 @@ namespace IndieSystem.Text.RegularExpressions
 {
     internal static class ThrowHelper
     {
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
         [DoesNotReturn]
 #endif
         internal static void ThrowArgumentNullException(ExceptionArgument arg) =>
             throw new ArgumentNullException(GetStringForExceptionArgument(arg));
 
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
         [DoesNotReturn]
 #endif
         internal static void ThrowArgumentOutOfRangeException(ExceptionArgument arg) =>
             throw new ArgumentOutOfRangeException(GetStringForExceptionArgument(arg));
 
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
         [DoesNotReturn]
 #endif
         internal static void ThrowArgumentOutOfRangeException(ExceptionArgument arg, ExceptionResource resource) =>

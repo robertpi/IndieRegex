@@ -46,7 +46,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
 
             // Continue to iterate until the stack is empty, popping the next item on each iteration.
             // Some popped items may be pushed back on as part of processing.
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             while (stack.Count > 0)
             {
                 (RegexNode Node, DoublyLinkedList<SymbolicRegexNode<BDD>> Result, DoublyLinkedList<SymbolicRegexNode<BDD>>[]? ChildResults) popped = stack.Pop();
@@ -375,7 +375,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
                 // A BDD is created for each range, and is then negated if the set is negated.  All of the BDDs for
                 // all of the ranges are stored in a set of these "conditions", which will later have all of the BDDs
                 // and'd (conjunction) together if the set is negated, or or'd (disjunction) together if not negated.
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                 List<(char First, char Last)>? ranges = RegexCharClass.ComputeRanges(new ReadOnlySpan<char>(set.ToCharArray()));
 #else
                 List<(char First, char Last)>? ranges = RegexCharClass.ComputeRanges(set);

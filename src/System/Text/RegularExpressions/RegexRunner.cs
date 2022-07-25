@@ -130,7 +130,7 @@ namespace IndieSystem.Text.RegularExpressions
             // We set runtext before calling InitializeForScan so that runmatch object is initialized with the text
             runtext = text;
 
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             InitializeForScan(regex, new ReadOnlySpan<char>(text.ToCharArray()), textstart, mode);
 #else
             InitializeForScan(regex, text, textstart, mode);
@@ -304,7 +304,7 @@ namespace IndieSystem.Text.RegularExpressions
                 {
                     _checkTimeout = true;
                     _timeout = (int)(timeout.TotalMilliseconds + 0.5); // Round;
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                     _timeoutOccursAt = Environment.TickCount + _timeout;
 #else
                     _timeoutOccursAt = Environment.TickCount64 + _timeout;
@@ -316,7 +316,7 @@ namespace IndieSystem.Text.RegularExpressions
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected internal void CheckTimeout()
         {
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             if (_checkTimeout && Environment.TickCount >= _timeoutOccursAt)
 #else
             if (_checkTimeout && Environment.TickCount64 >= _timeoutOccursAt)

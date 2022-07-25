@@ -196,7 +196,7 @@ namespace IndieSystem.Text.RegularExpressions
             new Enumerator(this);
 
         public bool TryGetValue(string key,
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
             [NotNullWhen(true)] 
 #endif
             out Group? value)

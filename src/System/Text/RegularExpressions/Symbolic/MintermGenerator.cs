@@ -93,7 +93,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
 
                 var stack = new Stack<PartitionTree>();
                 stack.Push(this);
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                 while (stack.Count > 0)
                 {
                     var node = stack.Pop();

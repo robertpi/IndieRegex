@@ -67,7 +67,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
                     if (label.Length > maxLabelLength)
                     {
                         info = $"FullLabel = \"{label}\" ";
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                         label = string.Concat(label.Substring(0, maxLabelLength), "..");
 #else
                         label = string.Concat(label.AsSpan(0, maxLabelLength), "..");
@@ -195,7 +195,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
                 sb.Append($"States = {matcher._stateCache.Count}&#13;");
                 sb.Append($"Transitions = {transitionCount}&#13;");
                 sb.Append($"Min Terms ({matcher.Solver.GetMinterms()!.Length}) = ")
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                     .Append(String.Join(",", DescribeLabels(matcher.Solver.GetMinterms()!, matcher._builder)));
 #else
                     .AppendJoin(',', DescribeLabels(matcher.Solver.GetMinterms()!, matcher._builder));

@@ -53,11 +53,11 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
         public static BitVector CreateTrue(int length)
         {
             var bv = new BitVector(length);
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             for (int i = 0; i < bv._blocks.Length; i++)
             {
                 bv._blocks[0] = ulong.MaxValue;
-        };
+            };
 #else
             Array.Fill(bv._blocks, ulong.MaxValue);
 #endif
@@ -181,14 +181,14 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
         {
             if (_hashcode == null)
             {
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                 foreach (var block in _blocks)
                 {
                     _hashcode ^= 31 * block.GetHashCode();
                 }
                 _hashcode ^= 31 * Length;
 #else
-            // Lazily compute and store the hash code if it hasn't yet been computed.
+                // Lazily compute and store the hash code if it hasn't yet been computed.
                 HashCode hc = default;
 #if NET6_0_OR_GREATER
                 hc.AddBytes(MemoryMarshal.AsBytes<ulong>(_blocks));
@@ -207,7 +207,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
         }
 
         public override bool Equals(
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
             [NotNullWhen(true)] 
 #endif
             object? obj) =>

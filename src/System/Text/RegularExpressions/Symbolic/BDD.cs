@@ -76,11 +76,8 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
             // Precompute a hashchode value that respects BDD equivalence.
             // Two equivalent BDDs will always have the same hashcode
             // that is independent of object id values of the BDD objects.
-#if NETFRAMEWORK
-            _hashcode = ordinal ^  one?.GetHashCode() ?? 0 ^ zero?.GetHashCode() ?? 0;
-#else
+
             _hashcode = HashCode.Combine(ordinal, one, zero);
-#endif
         }
 
         /// <summary>
@@ -461,7 +458,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
         /// If this is the case, outputs that terminal.
         /// </summary>
         public bool IsEssentiallyBoolean(
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
             [NotNullWhen(true)] 
 #endif
             out BDD? terminalActingAsTrue)

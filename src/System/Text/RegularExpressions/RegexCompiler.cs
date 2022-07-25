@@ -60,7 +60,7 @@ namespace IndieSystem.Text.RegularExpressions
         private static readonly MethodInfo s_charGetUnicodeInfo = typeof(char).GetMethod("GetUnicodeCategory", new Type[] { typeof(char) })!;
         private static readonly MethodInfo s_spanGetItemMethod = typeof(ReadOnlySpan<char>).GetMethod("get_Item", new Type[] { typeof(int) })!;
         private static readonly MethodInfo s_spanGetLengthMethod = typeof(ReadOnlySpan<char>).GetMethod("get_Length")!;
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
         private static readonly MethodInfo s_spanIndexOfChar = typeof(MemoryExtensions).GetMethodLiberalMatching("IndexOf", new Type[] { typeof(ReadOnlySpan<>), typeof(ReadOnlySpan<>).GetGenericArguments().First() })!.MakeGenericMethod(typeof(char));
         private static readonly MethodInfo s_spanIndexOfSpan = typeof(MemoryExtensions).GetMethodLiberalMatching("IndexOf", new Type[] { typeof(ReadOnlySpan<>), typeof(ReadOnlySpan<>) })!.MakeGenericMethod(typeof(char));
         private static readonly MethodInfo s_spanIndexOfAnyCharChar = typeof(MemoryExtensions).GetMethodLiberalMatching("IndexOfAny", new Type[] { typeof(ReadOnlySpan<>), typeof(ReadOnlySpan<>).GetGenericArguments().First(), typeof(ReadOnlySpan<>).GetGenericArguments().First() })!.MakeGenericMethod(typeof(char));
@@ -85,7 +85,7 @@ namespace IndieSystem.Text.RegularExpressions
 #endif
         private static readonly MethodInfo s_spanSliceIntMethod = typeof(ReadOnlySpan<char>).GetMethod("Slice", new Type[] { typeof(int) })!;
         private static readonly MethodInfo s_spanSliceIntIntMethod = typeof(ReadOnlySpan<char>).GetMethod("Slice", new Type[] { typeof(int), typeof(int) })!;
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
         private static readonly MethodInfo s_spanStartsWithSpan = typeof(MemoryExtensions).GetMethodLiberalMatching("StartsWith", new Type[] { typeof(ReadOnlySpan<>), typeof(ReadOnlySpan<>) })!.MakeGenericMethod(typeof(char));
 #else
         private static readonly MethodInfo s_spanStartsWithSpan = typeof(MemoryExtensions).GetMethod("StartsWith", new Type[] { typeof(ReadOnlySpan<>).MakeGenericType(Type.MakeGenericMethodParameter(0)), typeof(ReadOnlySpan<>).MakeGenericType(Type.MakeGenericMethodParameter(0)) })!.MakeGenericMethod(typeof(char));
@@ -337,7 +337,7 @@ namespace IndieSystem.Text.RegularExpressions
         /// </remarks>
         private RentedLocalBuilder RentInt32Local() => new RentedLocalBuilder(
             _int32LocalsPool ??= new Stack<LocalBuilder>(),
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             _int32LocalsPool.Count > 0 ? _int32LocalsPool.Pop() : DeclareInt32());
 #else
             _int32LocalsPool.TryPop(out LocalBuilder? iterationLocal) ? iterationLocal : DeclareInt32());
@@ -350,7 +350,7 @@ namespace IndieSystem.Text.RegularExpressions
         /// </remarks>
         private RentedLocalBuilder RentReadOnlySpanCharLocal() => new RentedLocalBuilder(
             _readOnlySpanCharLocalsPool ??= new Stack<LocalBuilder>(1), // capacity == 1 as we currently don't expect overlapping instances
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             _readOnlySpanCharLocalsPool.Count > 0 ? _readOnlySpanCharLocalsPool.Pop() : DeclareReadOnlySpanChar());
 #else
             _readOnlySpanCharLocalsPool.TryPop(out LocalBuilder? iterationLocal) ? iterationLocal : DeclareReadOnlySpanChar());
@@ -5556,7 +5556,7 @@ namespace IndieSystem.Text.RegularExpressions
 
             // Generate the lookup table to store 128 answers as bits. We use a const string instead of a byte[] / static
             // data property because it lets IL emit handle all the details for us.
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             var dest = new char[8];
             for (int i = 0; i < 128; i++)
             {

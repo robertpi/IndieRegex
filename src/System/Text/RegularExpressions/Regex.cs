@@ -106,7 +106,7 @@ namespace IndieSystem.Text.RegularExpressions
             else
             {
                 if (
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
                     RuntimeFeature.IsDynamicCodeCompiled && 
 #endif
                     (options & RegexOptions.Compiled) != 0)
@@ -124,7 +124,7 @@ namespace IndieSystem.Text.RegularExpressions
 
         /// <summary>Stores the supplied arguments and capture information, returning the parsed expression.</summary>
         private RegexTree Init(string pattern, RegexOptions options, TimeSpan matchTimeout,
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
             [NotNull] 
 #endif
             ref CultureInfo? culture)
@@ -187,8 +187,8 @@ namespace IndieSystem.Text.RegularExpressions
             throw new PlatformNotSupportedException();
 
         [CLSCompliant(false),
-#if !NETFRAMEWORK
-            DisallowNull 
+#if !NETFRAMEWORK && !NETSTANDARD
+            DisallowNull
 #endif
             ]
         protected IDictionary? Caps
@@ -206,8 +206,8 @@ namespace IndieSystem.Text.RegularExpressions
         }
 
         [CLSCompliant(false),
-#if !NETFRAMEWORK
-            DisallowNull 
+#if !NETFRAMEWORK && !NETSTANDARD
+            DisallowNull
 #endif
             ]
         protected IDictionary? CapNames
@@ -515,7 +515,7 @@ namespace IndieSystem.Text.RegularExpressions
         /// <summary>Internal worker which will scan the passed in string <paramref name="input"/> for all matches, and will call <paramref name="callback"/> for each match found.</summary>
         internal void RunAllMatchesWithCallback<TState>(string? input, int startat, ref TState state, MatchCallback<TState> callback, RegexRunnerMode mode, bool reuseMatchObject) =>
             RunAllMatchesWithCallback(input,
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                 input == null ? null : new ReadOnlySpan<char>(input.ToCharArray())
 #else
                 (ReadOnlySpan<char>)input
@@ -528,7 +528,7 @@ namespace IndieSystem.Text.RegularExpressions
         private void RunAllMatchesWithCallback<TState>(string? inputString, ReadOnlySpan<char> inputSpan, int startat, ref TState state, MatchCallback<TState> callback, RegexRunnerMode mode, bool reuseMatchObject)
         {
             Debug.Assert(inputString is null ||
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
                 inputSpan.SequenceEqual(new ReadOnlySpan<char>(inputString.ToCharArray()))
 #else
                 inputSpan.SequenceEqual(inputString)

@@ -23,7 +23,7 @@ namespace System.Threading
                 return false;
             }
 #else
-#if NETFRAMEWORK
+#if NETFRAMEWORK || NETSTANDARD
             return true;
 #else
             return RuntimeHelpers.TryEnsureSufficientExecutionStack();

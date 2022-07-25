@@ -323,7 +323,7 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
         /// <remarks>This function locks the matcher for safe concurrent use of the <see cref="_builder"/></remarks>
         private bool TryCreateNewTransition(
             MatchingState<TSet> sourceState, int mintermId, int offset, bool checkThreshold,
-#if !NETFRAMEWORK
+#if !NETFRAMEWORK && !NETSTANDARD
             [NotNullWhen(true)] 
 #endif
             out MatchingState<TSet>? nextState)

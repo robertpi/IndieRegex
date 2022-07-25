@@ -547,7 +547,7 @@ namespace IndieSystem.Text.RegularExpressions
                 strLength -= 2;
             }
 
-#if REGEXGENERATOR || NETFRAMEWORK
+#if REGEXGENERATOR || NETFRAMEWORK || NETSTANDARD
             return StringExtensions.Create
 #else
             return string.Create
@@ -1527,7 +1527,7 @@ namespace IndieSystem.Text.RegularExpressions
             // Get the pointer/length of the span to be able to pass it into string.Create.
             fixed (char* charsPtr = chars)
             {
-#if REGEXGENERATOR || NETFRAMEWORK
+#if REGEXGENERATOR || NETFRAMEWORK || NETSTANDARD
                 return StringExtensions.Create(
 #else
                 return string.Create(
