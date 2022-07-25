@@ -36,28 +36,13 @@ namespace System.Text
 
 namespace System
 {
-    internal static class StringExtensions
+    internal static partial class StringExtensions
     {
         public static string Create<TState>(int length, TState state, SpanAction<char, TState> action)
         {
             Span<char> span = length <= 256 ? stackalloc char[length] : new char[length];
             action(span, state);
             return span.ToString();
-        }
-
-        public static int CommonPrefixLength(this ReadOnlySpan<char> span, ReadOnlySpan<char> other)
-        {
-            int length = Math.Min(span.Length, other.Length);
-
-            for (int i = 0; i < length; i++)
-            {
-                if (span[i] != other[i])
-                {
-                    return i;
-                }
-            }
-
-            return length;
         }
     }
 }
@@ -89,3 +74,24 @@ namespace System.Threading
 }
 
 #endif
+
+namespace System
+{
+    internal static partial class StringExtensions
+    {
+        public static int CommonPrefixLength(this ReadOnlySpan<char> span, ReadOnlySpan<char> other)
+        {
+            int length = Math.Min(span.Length, other.Length);
+
+            for (int i = 0; i < length; i++)
+            {
+                if (span[i] != other[i])
+                {
+                    return i;
+                }
+            }
+
+            return length;
+        }
+    }
+}

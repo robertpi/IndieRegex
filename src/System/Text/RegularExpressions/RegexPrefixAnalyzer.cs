@@ -82,8 +82,7 @@ namespace IndieSystem.Text.RegularExpressions
                                     // and the smallest amount of prefix that overlapped with all
                                     // the previously seen branches.
 
-                                    // TODO find an alternative to CommonPrefixLength
-                                    // addedLength = vsb.AsSpan(initialLength, addedLength).CommonPrefixLength(alternateSb.AsSpan());
+                                    addedLength = vsb.AsSpan(initialLength, addedLength).CommonPrefixLength(alternateSb.AsSpan());
                                 }
 
                                 alternateSb.Dispose();

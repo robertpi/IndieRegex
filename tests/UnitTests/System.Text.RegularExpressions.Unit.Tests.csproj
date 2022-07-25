@@ -26,8 +26,9 @@
     <Compile Include="..\..\common\ValueStringBuilder.cs" Link="Production\ValueStringBuilder.cs" />
     <Compile Include="..\..\common\ValueListBuilder.cs" Link="Production\ValueListBuilder.cs" />
     <Compile Include="..\..\common\ValueListBuilder.Pop.cs" Link="Production\ValueListBuilder.Pop.cs" />
-    <Compile Include="..\..\src\SR.cs" Link="Production\SR.cs" />
-    <Compile Include="..\..\src\SR.Designer.cs" Link="Production\SR.Designer.cs" />
+	<Compile Include="..\..\src\SR.cs" Link="Production\SR.cs" />
+    <Compile Include="..\..\src\Stubs.cs" Link="Production\Stubs.cs" />
+	<Compile Include="..\..\src\SR.Designer.cs" Link="Production\SR.Designer.cs" />
     <Compile Include="..\..\src\System\Threading\StackHelper.cs" Link="Production\StackHelper.cs" />
     <Compile Include="..\..\src\System\Text\RegularExpressions\RegexCaseEquivalences.Data.cs" Link="Production\RegexCaseEquivalences.Data.cs" />
     <Compile Include="..\..\src\System\Text\RegularExpressions\RegexCaseEquivalences.cs" Link="Production\RegexCaseEquivalences.cs" />

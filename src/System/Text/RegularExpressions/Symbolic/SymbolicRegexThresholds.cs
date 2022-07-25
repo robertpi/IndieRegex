@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
+
 namespace IndieSystem.Text.RegularExpressions.Symbolic
 {
     /// <summary>
@@ -52,12 +54,15 @@ namespace IndieSystem.Text.RegularExpressions.Symbolic
         /// </remarks>
         internal static int GetSymbolicRegexSafeSizeThreshold()
         {
-            //object? safeSizeThreshold = AppContext.GetData(SymbolicRegexSafeSizeThreshold_ConfigKeyName);
+#if NET47_OR_GREATER || NETCOREAPP
+            object? safeSizeThreshold = AppContext.GetData(SymbolicRegexSafeSizeThreshold_ConfigKeyName);
+#else
+            object? safeSizeThreshold = AppDomain.CurrentDomain.GetData(SymbolicRegexSafeSizeThreshold_ConfigKeyName);
+#endif
 
-            //return (safeSizeThreshold is not int safeSizeThresholdInt || safeSizeThresholdInt <= 0) ?
-            //    DefaultSymbolicRegexSafeSizeThreshold :
-            //    safeSizeThresholdInt;
-            return int.MaxValue;
+            return (safeSizeThreshold is not int safeSizeThresholdInt || safeSizeThresholdInt <= 0) ?
+                DefaultSymbolicRegexSafeSizeThreshold :
+                safeSizeThresholdInt;
         }
     }
 }

@@ -20,6 +20,11 @@ public class AsmRegexBenchmark
     private static readonly SysRegex native = new(ObsfucationRegex, SysRegexOptions.IgnoreCase | SysRegexOptions.Compiled);
     private static readonly SysRegex nativeTimeout = new(ObsfucationRegex, SysRegexOptions.IgnoreCase | SysRegexOptions.Compiled, Timeout);
 
+    public AsmRegexBenchmark()
+    {
+        AppDomain.CurrentDomain.SetData("REGEX_NONBACKTRACKING_MAX_AUTOMATA_SIZE", 2000);
+    }
+
     [Benchmark]
     public void Backtracking()
     {
