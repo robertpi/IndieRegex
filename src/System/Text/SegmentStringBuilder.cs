@@ -74,18 +74,13 @@ namespace System.Text
                 length += span[i].Length;
             }
 
+            string result =
 #if NETFRAMEWORK || NETSTANDARD
-            var dest = new Span<char>(new char[length]);
-            Span<ReadOnlyMemory<char>> localSpan = this.AsSpan();
-            for (int i = 0; i < localSpan.Length; i++)
-            {
-                ReadOnlySpan<char> segment = localSpan[i].Span;
-                segment.CopyTo(dest);
-                dest = dest.Slice(segment.Length);
-            }
-            string result = new string(dest.ToArray());
+                StringExtensions.Create
 #else
-            string result = string.Create(length, this, static (dest, builder) =>
+                string.Create
+#endif
+                    (length, this, static (dest, builder) =>
             {
                 Span<ReadOnlyMemory<char>> localSpan = builder.AsSpan();
                 for (int i = 0; i < localSpan.Length; i++)
@@ -95,7 +90,6 @@ namespace System.Text
                     dest = dest.Slice(segment.Length);
                 }
             });
-#endif
 
             span.Clear();
             this = default;

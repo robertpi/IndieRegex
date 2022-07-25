@@ -5556,19 +5556,13 @@ namespace IndieSystem.Text.RegularExpressions
 
             // Generate the lookup table to store 128 answers as bits. We use a const string instead of a byte[] / static
             // data property because it lets IL emit handle all the details for us.
+            string bitVectorString =
 #if NETFRAMEWORK || NETSTANDARD
-            var dest = new char[8];
-            for (int i = 0; i < 128; i++)
-            {
-                char c = (char)i;
-                if (RegexCharClass.CharInClass(c, charClass))
-                {
-                    dest[i >> 4] |= (char)(1 << (i & 0xF));
-                }
-            }
-            string bitVectorString = new string(dest);
+                StringExtensions.Create
 #else
-            string bitVectorString = string.Create(8, charClass, static (dest, charClass) => // String length is 8 chars == 16 bytes == 128 bits.
+                string.Create
+#endif
+                    (8, charClass, static (dest, charClass) => // String length is 8 chars == 16 bytes == 128 bits.
             {
                 for (int i = 0; i < 128; i++)
                 {
@@ -5579,7 +5573,7 @@ namespace IndieSystem.Text.RegularExpressions
                     }
                 }
             });
-#endif
+
             // We determined that the character class may contain ASCII, so we
             // output the lookup against the lookup table.
 
