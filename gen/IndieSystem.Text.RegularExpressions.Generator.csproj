@@ -77,14 +77,4 @@
 			<LastGenOutput>SR.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 	</ItemGroup>
-
-	<Target Name="HotFudge" AfterTargets="ResolveAssemblyReferences">
-		<ItemGroup>
-			<ReferencePathToBeRemoved Include="@(ReferencePath)" Condition="$([System.String]::Copy(&quot;%(ReferencePath.Filename)&quot;).StartsWith('System.Text.RegularExpressions'))" />
-			<ReferencePath Remove="@(ReferencePathToBeRemoved)" />
-		</ItemGroup>
-
-		<Message Importance="high" Text="ReferencePath +++ @(ReferencePath) +++" />
-	</Target>
-
 </Project>

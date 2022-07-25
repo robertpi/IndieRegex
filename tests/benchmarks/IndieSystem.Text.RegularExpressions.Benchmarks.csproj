@@ -19,13 +19,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\IndieSystem.Text.RegularExpressions.csproj" />
   </ItemGroup>
-	
-    <Target Name="HotFudge" AfterTargets="ResolveAssemblyReferences">
-	    <ItemGroup>
-		    <ReferencePathToBeRemoved Include="@(ReferencePath)" Condition="$([System.String]::Copy(&quot;%(ReferencePath.Filename)&quot;).StartsWith('System.Text.RegularExpressions'))" />
-		    <ReferencePath Remove="@(ReferencePathToBeRemoved)" />
-	    </ItemGroup>
-
-	    <Message Importance="high" Text="ReferencePath +++ @(ReferencePath) +++" />
-    </Target>
 </Project>
