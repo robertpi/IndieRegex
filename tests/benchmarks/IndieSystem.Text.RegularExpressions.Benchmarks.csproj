@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net48;net461</TargetFrameworks>
+    <TargetFrameworks>net48;net461;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
