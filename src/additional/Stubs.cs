@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#if NETFRAMEWORK || NETSTANDARD
-
 using System;
 using System.Buffers;
 using System.Collections;
@@ -10,6 +8,9 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+
+#if NETFRAMEWORK || NETSTANDARD
+
 
 // This file provides helpers used to help compile some Regex source code (e.g. RegexParser) as part of the netstandard2.0 generator assembly.
 
@@ -52,6 +53,8 @@ namespace System.Buffers
     internal delegate void SpanAction<T, in TArg>(Span<T> span, TArg arg);
 }
 
+#endif
+
 namespace System.Threading
 {
     internal static class InterlockedExtensions
@@ -72,8 +75,6 @@ namespace System.Threading
         }
     }
 }
-
-#endif
 
 namespace System
 {

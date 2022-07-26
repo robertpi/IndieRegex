@@ -91,23 +91,20 @@
 	  <Compile Include="System\Text\RegularExpressions\Symbolic\UnicodeCategoryRanges.cs" />
 	  <Compile Include="System\Text\RegularExpressions\Symbolic\UnicodeCategoryRangesGenerator.cs" />
 	  <!-- Common or Common-branched source files -->
-      <Compile Include="..\common\HexConverter.cs" Link="Common\HexConverter.cs" />
-	  <Compile Include="..\common\Obsoletions.cs" Link="Common\Obsoletions.cs" />
-	  <Compile Include="..\common\ValueStringBuilder.cs" Link="Common\ValueStringBuilder.cs" />
-	  <Compile Include="..\common\ValueListBuilder.cs" Link="Common\ValueListBuilder.cs" />
-	  <Compile Include="..\common\ValueListBuilder.Pop.cs" Link="Common\ValueListBuilder.Pop.cs" />
-
-	  <!-- our additional common files -->
-	  <Compile Include="..\common\RequiresDynamicCodeAttribute.cs" Link="Common\RequiresDynamicCodeAttribute.cs" />
-	  <Compile Include="..\common\StringSyntaxAttribute.cs" Link="Common\StringSyntaxAttribute.cs" />
+      <Compile Include="common\HexConverter.cs" />
+	  <Compile Include="common\Obsoletions.cs" />
+	  <Compile Include="common\ValueStringBuilder.cs" />
+	  <Compile Include="common\ValueListBuilder.cs" />
+	  <Compile Include="common\ValueListBuilder.Pop.cs" />
 
 	  <!-- our additional files -->
 	  <Compile Include="AssemblyInfo.cs" />
-	  <Compile Include="HashCode.cs" />
-	  <Compile Include="InterlockedExtensions.cs" />
+	  <Compile Include="additional\HashCode.cs" />
+	  <Compile Include="additional\RequiresDynamicCodeAttribute.cs" />
+	  <Compile Include="additional\StringSyntaxAttribute.cs" />
 	  <Compile Include="SR.cs" />
 	  <Compile Include="SR.Designer.cs" />
-	  <Compile Include="Stubs.cs" />
+	  <Compile Include="additional\Stubs.cs" />
 	  <Compile Include="System\Text\RegularExpressions\ReflectionHelper.cs" />
 
   </ItemGroup>
