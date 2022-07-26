@@ -8,6 +8,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
+	  <Compile Include="additional\BitOperations.cs" />
 	  <Compile Include="System\Collections\HashtableExtensions.cs" />
 	  <Compile Include="System\Text\RegularExpressions\ValueMatch.cs" />
 	  <Compile Include="System\Threading\StackHelper.cs" />
@@ -99,13 +100,13 @@
 
 	  <!-- our additional files -->
 	  <Compile Include="AssemblyInfo.cs" />
+	  <Compile Include="SR.cs" />
+	  <Compile Include="SR.Designer.cs" />
 	  <Compile Include="additional\HashCode.cs" />
 	  <Compile Include="additional\RequiresDynamicCodeAttribute.cs" />
 	  <Compile Include="additional\StringSyntaxAttribute.cs" />
-	  <Compile Include="SR.cs" />
-	  <Compile Include="SR.Designer.cs" />
 	  <Compile Include="additional\Stubs.cs" />
-	  <Compile Include="System\Text\RegularExpressions\ReflectionHelper.cs" />
+	  <Compile Include="additional\ReflectionHelper.cs" />
 
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'netstandard2.0'">
