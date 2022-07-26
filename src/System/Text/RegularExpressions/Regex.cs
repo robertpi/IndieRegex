@@ -107,7 +107,7 @@ namespace IndieSystem.Text.RegularExpressions
             {
                 if (
 #if !NETFRAMEWORK && !NETSTANDARD
-                    RuntimeFeature.IsDynamicCodeCompiled && 
+                    RuntimeFeature.IsDynamicCodeCompiled &&
 #endif
                     (options & RegexOptions.Compiled) != 0)
                 {
@@ -125,7 +125,7 @@ namespace IndieSystem.Text.RegularExpressions
         /// <summary>Stores the supplied arguments and capture information, returning the parsed expression.</summary>
         private RegexTree Init(string pattern, RegexOptions options, TimeSpan matchTimeout,
 #if !NETFRAMEWORK && !NETSTANDARD
-            [NotNull] 
+            [NotNull]
 #endif
             ref CultureInfo? culture)
         {
@@ -186,11 +186,9 @@ namespace IndieSystem.Text.RegularExpressions
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) =>
             throw new PlatformNotSupportedException();
 
-        [CLSCompliant(false),
 #if !NETFRAMEWORK && !NETSTANDARD
-            DisallowNull
+            [DisallowNull]
 #endif
-            ]
         protected IDictionary? Caps
         {
             get => caps;
@@ -205,11 +203,9 @@ namespace IndieSystem.Text.RegularExpressions
             }
         }
 
-        [CLSCompliant(false),
 #if !NETFRAMEWORK && !NETSTANDARD
-            DisallowNull
+            [DisallowNull]
 #endif
-            ]
         protected IDictionary? CapNames
         {
             get => capnames;
