@@ -10,10 +10,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants);DEBUG</DefineConstants> <!-- always define debug, even in release builds -->
     <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="*" />
-
     <Compile Include="RegexCharClassTests.cs" />
     <Compile Include="RegexFindOptimizationsTests.cs" />
     <Compile Include="RegexPrefixAnalyzerTests.cs" />
@@ -79,14 +78,4 @@
 	    <PrivateAssets>all</PrivateAssets>
 	  </PackageReference>
   </ItemGroup>
-
-	<Target Name="HotFudge" AfterTargets="ResolveAssemblyReferences">
-        <ItemGroup>
-          <ReferencePathToBeRemoved Include="@(ReferencePath)" Condition="$([System.String]::Copy(&quot;%(ReferencePath.Filename)&quot;).StartsWith('System.Text.RegularExpressions'))" />
-          <ReferencePath Remove="@(ReferencePathToBeRemoved)" />
-        </ItemGroup>
-
-		<Message Importance="high" Text="ReferencePath +++ @(ReferencePath) +++" />
-	</Target>
-
 </Project>

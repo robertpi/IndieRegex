@@ -19,10 +19,9 @@
 	<RestoreAdditionalProjectSources>
 		https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json
 	</RestoreAdditionalProjectSources>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="*" />	  
-	  
     <Compile Include="AttRegexTests.cs" />
     <Compile Include="CaptureCollectionTests.cs" />
     <Compile Include="GroupCollectionTests.cs" />
