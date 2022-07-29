@@ -46,9 +46,9 @@
     <Compile Include="RegexParserTests.cs" />
 
 	<Compile Include="..\..\src\SR.cs" Link="Production\SR.cs" />
-    <Compile Include="..\..\src\SR.Designer.cs" Link="Production\SR.Designer.cs" />
-  
-	
+    <Compile Include="..\..\src\SR.g.cs" Link="Production\SR.g.cs" />
+
+
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Compile Include="..\..\src\System\Text\RegularExpressions\RegexParseError.cs" Link="System\Text\RegularExpressions\RegexParseError.cs" />
@@ -83,7 +83,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.3.0-2.final" />
   </ItemGroup>
   <ItemGroup>
-    <HighAotMemoryUsageAssembly Include="Microsoft.CodeAnalysis.CSharp.dll" /> 
+    <HighAotMemoryUsageAssembly Include="Microsoft.CodeAnalysis.CSharp.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\IndieSystem.Text.RegularExpressions.csproj" />
