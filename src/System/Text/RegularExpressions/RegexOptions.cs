@@ -6,12 +6,7 @@ using System;
 namespace IndieSystem.Text.RegularExpressions
 {
     [Flags]
-#if REGEXGENERATOR
-    internal
-#else
-    public
-#endif
-    enum RegexOptions
+    public enum RegexOptions
     {
         /// <summary>Use default behavior.</summary>
         None                    = 0x0000,

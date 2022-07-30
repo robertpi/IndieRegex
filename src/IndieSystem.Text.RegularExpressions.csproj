@@ -36,7 +36,6 @@
 	  <Compile Include="System\Text\RegularExpressions\RegexCharClass.cs" />
 	  <Compile Include="System\Text\RegularExpressions\RegexCompilationInfo.cs" />
 	  <Compile Include="System\Text\RegularExpressions\RegexFindOptimizations.cs" />
-	  <Compile Include="System\Text\RegularExpressions\RegexGeneratorAttribute.cs" />
 	  <Compile Include="System\Text\RegularExpressions\RegexInterpreter.cs" />
 	  <Compile Include="System\Text\RegularExpressions\RegexInterpreterCode.cs" />
 	  <Compile Include="System\Text\RegularExpressions\RegexMatchTimeoutException.cs" />

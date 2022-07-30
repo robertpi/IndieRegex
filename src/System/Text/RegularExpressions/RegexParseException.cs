@@ -11,12 +11,7 @@ namespace IndieSystem.Text.RegularExpressions
     /// detailed information in the <see cref="Error"/> and <see cref="Offset"/> properties.
     /// </summary>
     [Serializable]
-#if REGEXGENERATOR
-    internal
-#else
-    public
-#endif
-    sealed class RegexParseException : ArgumentException
+    public sealed class RegexParseException : ArgumentException
     {
         /// <summary>Gets the error that happened during parsing.</summary>
         public RegexParseError Error { get; }
