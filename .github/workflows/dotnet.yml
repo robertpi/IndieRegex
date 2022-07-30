@@ -20,13 +20,13 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Release
     - name: Test
       run: dotnet test --no-build --verbosity normal
       continue-on-error: true
     - name: Benchmark
       working-directory: tests\benchmarks\
-      run: dotnet build -c Release & dotnet bin\release\net6.0\IndieSystem.Text.RegularExpressions.Benchmarks.dll --runtimes net461 netcoreapp3.1 net5.0 net6.0 --filter *AsmRegexBenchmark*
+      run: dotnet bin\release\net6.0\IndieSystem.Text.RegularExpressions.Benchmarks.dll --runtimes net461 netcoreapp3.1 net5.0 net6.0 --filter *AsmRegexBenchmark*
     - name: Upload dotnet benchmark results
       uses: actions/upload-artifact@v3
       with:
@@ -34,7 +34,7 @@ jobs:
         path: tests\benchmarks\BenchmarkDotNet.Artifacts\
     - name: Create the package
       working-directory: src\
-      run: dotnet pack --configuration Release
+      run: dotnet pack --no-build
     - name: Upload nuget package
       uses: actions/upload-artifact@v3
       with:
