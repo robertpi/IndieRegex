@@ -1,12 +1,12 @@
 # IndieSystem.Text.RegularExpressions
 
-IndieRegex or IndieSystem.Text.RegularExpressions is a drop in replacement for .NET's Regex class. It is build using the source of Regex from .NET 7.0, modified and patched to run on .NET Framework 4.6.1, .NET Standard 2.0 .NET Core 3.1, .NET 5.0 and .NET 6.0.
+IndieRegex or IndieSystem.Text.RegularExpressions is a drop-in replacement for .NET's Regex class. It is built using the source of Regex from .NET 7.0, modified and patched to run on .NET Framework 4.6.1, .NET Standard 2.0, .NET Core 3.1, .NET 5.0 and .NET 6.0.
 
-In .NET 7.0 the team has invested heavily in Regex both in terms of performance and functionality. [This blog post contains]:(https://devblogs.microsoft.com/dotnet/regular-expression-improvements-in-dotnet-7/) a good description of the changes. The best way to benefit from these changes is to upgrade to .NET 7.0. If upgrading is possible, then package allows developers to gain some of the benefits without upgrading.
+In .NET 7.0 the team has invested heavily in Regex both in terms of performance and functionality. [This blog post contains](https://devblogs.microsoft.com/dotnet/regular-expression-improvements-in-dotnet-7/) a good description of the changes. The best way to benefit from these changes is to upgrade to .NET 7.0. If upgrading is possible, then package allows developers to gain some of the benefits without upgrading.
 
-Particularly interesting are .NET 7.0's non-backtracking regex. One issue with backtracking regex, is their worst case performance can be very bad, there are many explanations of "catastrophic backtracking" on the internet, so we won't go into it further here. Non-backtracking regex use a different algorithm to execute, while this algorithm not necessarily faster, it does guarantee a linear execution time with respect to the search string size. A guaranteed execution time is particularly useful if the regex is to be run on untrusted input, it means an attacker cannot create a DOS back crafting an input that will produce catastrophic backtracking.
+Particularly interesting are .NET 7.0's non-backtracking regex. One issue with backtracking regexes is their worst case performance can be very bad, there are many explanations of "catastrophic backtracking" on the internet, so we won't go into it further here. Non-backtracking regexes use a different algorithm to execute, while this algorithm is not necessarily faster, it does guarantee a linear execution time with respect to the search string size. A guaranteed execution time is particularly useful if the regex is to be run on untrusted input; it means an attacker cannot create a DOS by crafting an input that will produce catastrophic backtracking.
 
-While the non-backtracking algorithm isn't necessarily faster than the backtracking algorithms, tests that I have run seemed to cases where non-backtracking regex are significantly faster backtracking regexes. An example of a benchmark from the CI is shown below.
+While the non-backtracking algorithm isn't necessarily faster than the backtracking algorithms, tests that I have run seem to find cases where non-backtracking regexes are significantly faster than backtracking regexes. An example of a benchmark from the CI is shown below.
 
 ``` ini
 
