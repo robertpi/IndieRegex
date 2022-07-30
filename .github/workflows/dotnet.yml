@@ -9,17 +9,24 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: [ '3.1.x', '5.0.x', '6.0.x' ]
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
+      continueOnError: true
       run: dotnet test --no-build --verbosity normal
+    - name: Benchmark
+      run: dotnet build -c Release & dotnet bin\release\net6.0\IndieSystem.Text.RegularExpressions.Benchmarks.dll --runtimes net461 netcoreapp3.1 net5.0 net6.0 --filter *AsmRegexBenchmark*
+        working-directory: test/benchmarks
+    - name: Create the package
+      run: dotnet pack --configuration Release
+        working-directory: src/
