@@ -26,10 +26,10 @@ jobs:
         dotnet-version: '7.0.x'
         include-prerelease: true
     - name: Read version file
-        id: verison_file
-        uses: andstor/file-reader-action@v1
-        with:
-          path: "VERISON"
+      id: verison_file
+      uses: andstor/file-reader-action@v1
+      with:
+        path: "VERISON"
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
