@@ -7,6 +7,11 @@
 	<EnablePreviewFeatures>true</EnablePreviewFeatures>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
+
+  <!-- <PropertyGroup>
+    <DefineConstants>$(DefineConstants);NO_ARRAY_POOL</DefineConstants>
+  </PropertyGroup> -->
+
   <ItemGroup>
 	  <Compile Include="additional\BitOperations.cs" />
 	  <Compile Include="System\Collections\HashtableExtensions.cs" />
