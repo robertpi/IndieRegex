@@ -25,10 +25,15 @@ jobs:
       with:
         dotnet-version: '7.0.x'
         include-prerelease: true
+    - name: Read version file
+        id: verison_file
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "VERISON"
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build --no-restore --configuration Release -p:Version=${ steps.read_file.outputs.contents }${ env.GITHUB_RUN_ID }
     - name: Test
       run: dotnet test --no-build --verbosity normal
       continue-on-error: true
@@ -42,9 +47,9 @@ jobs:
         path: tests\benchmarks\BenchmarkDotNet.Artifacts\
     - name: Create the package
       working-directory: src\
-      run: dotnet pack --no-build --configuration Release
+      run: dotnet pack --no-build --configuration Release -p:Version=${ steps.read_file.outputs.contents }${ env.GITHUB_RUN_ID }
     - name: Upload nuget package
       uses: actions/upload-artifact@v3
       with:
-        name: IndieSystem.Text.RegularExpressions.1.0.0.nupkg
-        path: src\bin\Release\IndieSystem.Text.RegularExpressions.1.0.0.nupkg
+        name: IndieSystem.Text.RegularExpressions.${ steps.read_file.outputs.contents }${ env.GITHUB_RUN_ID }.nupkg
+        path: src\bin\Release\IndieSystem.Text.RegularExpressions.${ steps.read_file.outputs.contents }${ env.GITHUB_RUN_ID }.nupkg
