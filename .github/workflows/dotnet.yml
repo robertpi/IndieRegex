@@ -25,8 +25,8 @@ jobs:
       continueOnError: true
       run: dotnet test --no-build --verbosity normal
     - name: Benchmark
+      working-directory: test/benchmarks
       run: dotnet build -c Release & dotnet bin\release\net6.0\IndieSystem.Text.RegularExpressions.Benchmarks.dll --runtimes net461 netcoreapp3.1 net5.0 net6.0 --filter *AsmRegexBenchmark*
-        working-directory: test/benchmarks
     - name: Create the package
+      working-directory: src/
       run: dotnet pack --configuration Release
-        working-directory: src/
