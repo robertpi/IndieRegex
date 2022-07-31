@@ -1,4 +1,4 @@
-# IndieSystem.Text.RegularExpressions
+# IndieRegex
 
 IndieRegex or IndieSystem.Text.RegularExpressions is a drop-in replacement for .NET's Regex class. It is built using the source of Regex from .NET 7.0, modified and patched to run on .NET Framework 4.6.1, .NET Standard 2.0, .NET Core 3.1, .NET 5.0 and .NET 6.0.
 
@@ -56,3 +56,6 @@ Intel Xeon Platinum 8272CL CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
 
 
 
+# License
+
+This repository is licensed under the [MIT](LICENCE.TXT) license.
