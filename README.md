@@ -60,6 +60,8 @@ This project reuses source from the [dotnet/runtime](https://github.com/dotnet/r
 
 This project is not support or endorsed by The .NET Foundation nor Microsoft.
 
+Note on copyright: the copyright for the majority of source in this repository is owned by the .NET Foundation and Contributors.
+
 # License
 
 This repository is licensed under the [MIT](LICENCE.TXT) license.
