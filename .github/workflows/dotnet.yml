@@ -34,7 +34,7 @@ jobs:
       id: verison
       run: echo " ${{ env.VERSION }} "
       env:
-        VERSION: ${{ steps.version_file.outputs.contents }}.${{ env.GITHUB_RUN_ID }}
+        VERSION: ${{ steps.version_file.outputs.contents }}.${{ github.run_id }}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
