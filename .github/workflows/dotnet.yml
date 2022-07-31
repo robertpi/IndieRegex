@@ -38,7 +38,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --configuration Release -p:Version=${{ env.VERSION }}
+      run: dotnet build --no-restore --configuration Release -p:Version=${{ steps.version.env.VERSION }}
     - name: Test
       run: dotnet test --no-build --verbosity normal
       continue-on-error: true
@@ -52,9 +52,9 @@ jobs:
         path: tests\benchmarks\BenchmarkDotNet.Artifacts\
     - name: Create the package
       working-directory: src\
-      run: dotnet pack --no-build --configuration Release -p:Version=${{ env.VERSION }}
+      run: dotnet pack --no-build --configuration Release -p:Version=${{ steps.version.env.VERSION }}
     - name: Upload nuget package
       uses: actions/upload-artifact@v3
       with:
-        name: IndieSystem.Text.RegularExpressions.${{ env.VERSION }}.nupkg
-        path: src\bin\Release\IndieSystem.Text.RegularExpressions.${{ env.VERSION }}.nupkg
+        name: IndieSystem.Text.RegularExpressions.${{ steps.version.env.VERSION }}.nupkg
+        path: src\bin\Release\IndieSystem.Text.RegularExpressions.${{ steps.version.env.VERSION }}.nupkg
