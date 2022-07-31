@@ -30,10 +30,13 @@ jobs:
       uses: andstor/file-reader-action@v1
       with:
         path: "VERISON"
+    - name: set version env
+      env:
+        VERSION: ${{ steps.verison_file.outputs.contents }}.${{ env.GITHUB_RUN_ID }}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --configuration Release -p:Version=$steps.verison_file.outputs.contents.$env.GITHUB_RUN_ID
+      run: dotnet build --no-restore --configuration Release -p:Version=$VERSION
     - name: Test
       run: dotnet test --no-build --verbosity normal
       continue-on-error: true
@@ -47,9 +50,9 @@ jobs:
         path: tests\benchmarks\BenchmarkDotNet.Artifacts\
     - name: Create the package
       working-directory: src\
-      run: dotnet pack --no-build --configuration Release -p:Version=$steps.verison_file.outputs.contents.$env.GITHUB_RUN_ID
+      run: dotnet pack --no-build --configuration Release -p:Version=$VERSION
     - name: Upload nuget package
       uses: actions/upload-artifact@v3
       with:
-        name: IndieSystem.Text.RegularExpressions.$steps.verison_file.outputs.contents.$env.GITHUB_RUN_ID.nupkg
-        path: src\bin\Release\IndieSystem.Text.RegularExpressions.$steps.verison_file.outputs.contents.$env.GITHUB_RUN_ID.nupkg
+        name: IndieSystem.Text.RegularExpressions.$VERSION.nupkg
+        path: src\bin\Release\IndieSystem.Text.RegularExpressions.$VERSION.nupkg
