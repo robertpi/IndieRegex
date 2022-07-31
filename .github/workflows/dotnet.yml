@@ -31,6 +31,7 @@ jobs:
       with:
         path: "VERISON"
     - name: set version env
+      run: echo " $VERISON "
       env:
         VERSION: ${{ steps.verison_file.outputs.contents }}.${{ env.GITHUB_RUN_ID }}
     - name: Restore dependencies
