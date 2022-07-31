@@ -54,7 +54,11 @@ Intel Xeon Platinum 8272CL CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
 |          NativeTimeout | Job-GFKAAW | .NET Framework 4.6.1 |        net461 | 1,663.74 μs |  2.408 μs |  2.135 μs | 1,663.85 μs |  1.00 |    0.00 |
 
 
+# Disclaimer
 
+This project reuses source from the [dotnet/runtime](https://github.com/dotnet/runtime) repository. This kind of reuse is permitted under the permissive MIT license used for both the dotnet/runtime repository and this repository.
+
+This project is not support or endorsed by The .NET Foundation nor Microsoft.
 
 # License
 
